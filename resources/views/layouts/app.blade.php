@@ -111,14 +111,9 @@
 
                 <div class="row">
                     <div class="col-lg-12">
-
-{{--                        <a class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">--}}
-
                         <a href="#menu-toggle" class="btn btn-light" id="menu-toggle">
                             <img style="height: 30px" src="{{asset('images/menu_icon.png')}}" alt="menuIcon" class="image">
-{{--                            <i class="fas fa-bars"></i>--}}
                         </a>
-
                         @yield('content')
                     </div>
                 </div>

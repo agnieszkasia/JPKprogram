@@ -18,15 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () { return view('welcome');})->name('welcome');
-
+Route::group(['middleware' => ['guest']], function (){
+    Route::get('/', function () { return view('welcome');})->name('welcome');
+});
 
 Auth::routes();
 
 Route::group(['middleware' => ['auth']], function (){
 
-//    Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/profile', [UserController::class, 'index'])->name('profile');
     Route::get('/profile/{id}/edit', [UserController::class, 'edit']);
     Route::post('/profile/{id}/update', [UserController::class, 'update']);
@@ -48,4 +48,8 @@ Route::group(['middleware' => ['auth']], function (){
     Route::post('/product/{id}/update', [ProductController::class, 'update']);
 
 });
+
+Route::any('{query}',function() { return redirect('/'); })
+    ->where('query', '.*');
+
 
