@@ -160,6 +160,17 @@ html, body {
     height: 100%;
 }
 
+.bg2 {
+    background: url(../images/bg1.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    position: sticky;
+    height: 100%;
+    backdrop-filter: blur(5px) ;
+}
+
 .bg-black {
     background-color: #000000;
 }

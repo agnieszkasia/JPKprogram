@@ -25,8 +25,11 @@ Auth::routes();
 
 Route::group(['middleware' => ['auth']], function (){
 
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
+//    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/profile', [UserController::class, 'index'])->name('profile');
+    Route::get('/profile/{id}/edit', [UserController::class, 'edit']);
+    Route::post('/profile/{id}/update', [UserController::class, 'update']);
 
     Route::get('/invoices', [InvoiceController::class, 'showAll'])->name('invoices');
     Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('create_invoice');
