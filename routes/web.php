@@ -3,6 +3,8 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,6 +26,7 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function (){
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/profile', [UserController::class, 'index'])->name('profile');
 
     Route::get('/invoices', [InvoiceController::class, 'showAll'])->name('invoices');
     Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('create_invoice');

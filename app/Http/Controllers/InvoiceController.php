@@ -13,6 +13,7 @@ class InvoiceController extends Controller{
         $user = Auth::user();
         $invoices = $user->invoices;
         $invoicesNumber = count($invoices);
+        $price = array();
         for ($i=0; $i<$invoicesNumber;$i++) {
             $productsData = explode(';',$invoices[$i]->products);
             $productsNumber = count($productsData)/3;

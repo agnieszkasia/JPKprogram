@@ -93,10 +93,10 @@ return [
     'multiple_of' => 'The :attribute must be a multiple of :value.',
     'not_in' => 'Zaznaczona opcja :attribute jest nieprawidłowa.',
     'not_regex' => 'The :attribute format is invalid.',
-    'numeric' => ':attribute musi być numeryczne.',
+    'numeric' => ':attribute musi być liczbą.',
     'password' => 'The password is incorrect.',
     'present' => 'The :attribute field must be present.',
-    'regex' => 'Pole :attribute jest nieprawidłowego formatu.',
+    'regex' => ':attribute jest nieprawidłowego formatu.',
     'required' => 'Pole :attribute jest wymagane.',
     'required_if' => 'Pole :attribute jest wymagane jeśli pole :other ma wartość :value.',
     'required_unless' => 'The :attribute field is required unless :other is in :values.',
@@ -134,6 +134,33 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'first_name' => [
+            'regex' => ':attribute musi składać się tylko z liter.',
+            'min' => ':attribute musi mieć co najmniej :min znaki.',
+        ],
+        'family_name' => [
+            'regex' => ':attribute musi składać się tylko z liter.',
+            'min' => ':attribute musi mieć co najmniej :min znaki.',
+        ],
+        'company' => [
+            'min' => ':attribute musi mieć co najmniej :min znaki.',
+        ],
+        'street_name' => [
+            'min' => ':attribute musi mieć co najmniej :min znaki.',
+        ],
+        'nip' => [
+            'unique' => ':attribute o podanym numerze został już użyty.',
+        ],
+        'email' => [
+            'unique' => ':attribute został już użyty.',
+        ],
+        'birth_date' => [
+            'regex' => ':attribute jest niepoprawna.',
+        ],
+        'password' => [
+            'confirmed' => 'Podane hasła nie są jednakowe.',
+        ],
+
     ],
 
     /*
@@ -147,6 +174,18 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'first_name' => 'Imię',
+        'family_name' => 'Nazwisko',
+        'company' => 'Nazwa firmy',
+        'street_name' => 'Ulica',
+        'house_number' => 'Numer budynku',
+        'postal_code' => 'Kod pocztowy',
+        'city' => 'Miasto',
+        'nip' => 'NIP',
+        'birth_date' => 'Data urodzenia',
+        'email' => 'Email',
+        'password' => 'Hasło',
+    ],
 
 ];

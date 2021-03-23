@@ -1,3 +1,4 @@
+/* side navbar wrapper*/
 #wrapper {
     padding-left: 0;
     -webkit-transition: all 0.5s ease;
@@ -40,6 +41,36 @@
     margin-right: -250px;
 }
 
+@media (min-width: 768px) {
+    #wrapper {
+        padding-left: 250px;
+    }
+
+    #wrapper.toggled{
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 250px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        padding: 20px;
+        position: relative;
+    }
+
+    #wrapper.toggled #page-content-wrapper{
+        position: relative;
+        margin-right: 0;
+    }
+}
+/* end - side navbar wrapper */
+
+/* sidebar links*/
 .sidebar-nav {
     position: absolute;
     top: 0;
@@ -80,34 +111,12 @@
     background: none;
 }
 
-@media (min-width: 768px) {
-    #wrapper {
-        padding-left: 250px;
-    }
-
-    #wrapper.toggled{
-        padding-left: 0;
-    }
-
-    #sidebar-wrapper {
-        width: 250px;
-    }
-
-    #wrapper.toggled #sidebar-wrapper {
-        width: 0;
-    }
-
-    #page-content-wrapper {
-        padding: 20px;
-        position: relative;
-    }
-
-    #wrapper.toggled #page-content-wrapper{
-        position: relative;
-        margin-right: 0;
-    }
+.sidebar-nav-link {
+    line-height: 24px;
+    display: block;
+    color: white;
+    padding: 1rem 0;
 }
-
 
 .content {
     text-align: center;
@@ -131,14 +140,14 @@
     margin-bottom: 30px;
 }
 
-
+/* font*/
 body {
     font-family: "Montserrat", sans-serif;
 }
 
+/* background image*/
 html, body {
     height: 100%;
-
 }
 
 .bg {
@@ -149,20 +158,18 @@ html, body {
     background-size: cover;
     position: sticky;
     height: 100%;
-    /*overflow: hidden;*/
-    /*backdrop-filter: blur(5px);*/
-
 }
 
 .bg-black {
     background-color: #000000;
 }
+/* end - background image*/
+
 
 .card {
     border-radius: 0;
     border: none;
     background-color: rgba(255, 255, 255, 0.9);
-    /*backdrop-filter: blur(10px);*/
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -173,4 +180,12 @@ html, body {
 }
 .navbar-dark .navbar-nav .nav-link.disabled {
     color: rgba(255, 255, 255, 0.25);
+}
+
+.h7 {
+    font-size: 12px;
+}
+.border-bottom-2 {
+
+    border-bottom: 2px solid #ffffff;
 }

@@ -51,15 +51,15 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => ['required', 'string', 'max:255'],
-            'family_name' => ['required', 'string', 'max:255'],
-            'company' => ['required', 'string', 'max:255'],
-            'street_name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required','regex:/^[a-zA-Z]+$/u','string', 'max:255', 'min:2'],
+            'family_name' => ['required', 'string', 'max:255', 'min:2'],
+            'company' => ['required', 'string', 'max:255', 'min:2'],
+            'street_name' => ['required', 'string', 'min:3', 'max:255'],
             'house_number' => ['required', 'string', 'max:255'],
-            'postal_code' => ['required', 'string', 'max:255'],
+            'postal_code' => ['required','regex:/[0-9]{2}-[0-9]{3}/u', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
-            'nip' => ['required', 'string', 'size:10'],
-            'birth_date' => ['required', 'string', 'max:255'],
+            'nip' => ['required', 'string', 'regex:/[0-9]{10}/u', 'unique:users', 'size:10'],
+            'birth_date' => ['required', 'string','regex:/[0-9]{2}\.[0-9]{2}\.19[0-9]{2}|200[0,1,2,3]/u', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
