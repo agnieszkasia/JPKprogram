@@ -134,7 +134,7 @@
                                         <label for="nip" class=" col-form-label">{{ __('NIP') }}</label>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input id="nip" type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip') }}" placeholder="" required autocomplete="nip" >
+                                        <input id="nip" type="text" class="form-control @error('nip') is-invalid @enderror" name="nip" value="{{ old('nip') }}" placeholder="000 00 00 00" required autocomplete="nip" >
 
                                         @error('nip')
                                         <span class="invalid-feedback" role="alert">
@@ -150,7 +150,7 @@
                                         <label for="email" class="col-form-label text-md-right">{{ __('Adres E-mail') }}</label>
                                     </div>
                                     <div class="col-md-10">
-                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="example@email.com" required autocomplete="email">
+                                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="email@mail.com" required autocomplete="email">
 
                                         @error('email')
                                         <span class="invalid-feedback" role="alert">

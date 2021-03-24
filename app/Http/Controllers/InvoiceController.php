@@ -17,6 +17,7 @@ class InvoiceController extends Controller{
         for ($i=0; $i<$invoicesNumber;$i++) {
             $productsData = explode(';',$invoices[$i]->products);
             $productsNumber = count($productsData)/3;
+//            dd($productsData);
             $price[$i] = 0;
             for ($j=0; $j<$productsNumber;$j++){
                 $product[$j] = $productsData[$j*3+2];
@@ -27,15 +28,22 @@ class InvoiceController extends Controller{
     }
 
     public function create(){
+        $last_invoice = Auth::user()->invoices->last();
+        if ($last_invoice->invoice_number == null){
+            $invoice_number_temp = 1;
+        } else {
+            $invoice_number_temp = (int)$last_invoice->invoice_number;
+        }
+        $invoice_number = ($invoice_number_temp+1)."/".Carbon::now()->year;
         $currentDate = Carbon::now()->toDateString();
-        return view('invoices.create', compact('currentDate'));
+        return view('invoices.create', compact('currentDate', 'invoice_number'));
     }
 
     public function store(Request $request){
         $products = $this->getProductsToString($request);
-
         $invoice = Invoice::create([
             'user_id' => Auth::user()->getAuthIdentifier(),
+            'invoice_number' => $request->input('invoice_number'),
             'company' => $request->input('company'),
             'street_name' => $request->input('street_name'),
             'house_number' => $request->input('house_number'),
@@ -68,8 +76,28 @@ class InvoiceController extends Controller{
     }
 
     public function show($id){
+        $user = Auth::user();
+
         $invoice = Invoice::find($id);
-        return view('invoices/show',compact('invoice'));
+
+        $products = explode(';',$invoice->products);
+        $productsNumber = count($products)/3;
+//        $all_products_price = array();
+        $all_products_price[0] = 0;
+        $all_products_price[1] = 0;
+        $all_products_price[2] =0;
+        for ($i=0; $i<$productsNumber; $i++){
+            $product[$i][0] = $products[$i*3];
+            $product[$i][1] = $products[$i*3+1];
+            $product[$i][2] = $products[$i*3+2];
+            $product[$i][3] = round($products[$i*3+2]*$products[$i*3+1]/1.23,2);
+            $product[$i][4] = round($products[$i*3+2]*$products[$i*3+1]/1.23*0.23,2);
+            $product[$i][5] = $products[$i*3+2]*$products[$i*3+1];
+            $all_products_price[0] = ($all_products_price[0] + $product[$i][3]);
+            $all_products_price[1] = ($all_products_price[1] + $product[$i][4]);
+            $all_products_price[2] = ($all_products_price[2] + $product[$i][5]);
+        }
+        return view('invoices/show',compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
     }
 
     public function edit($id){
@@ -78,9 +106,9 @@ class InvoiceController extends Controller{
         $products = explode(';',$invoice->products);
         $productsNumber = count($products)/3;
         for ($i=0; $i<$productsNumber; $i++){
-            $product[0][$i] = $products[$i];
-            $product[1][$i] = $products[$i+3];
-            $product[2][$i] = $products[$i+6];
+                $product[$i][0] = $products[$i*3];
+                $product[$i][1] = $products[$i*3+1];
+                $product[$i][2] = $products[$i*3+2];
 
         }
         return view('invoices/edit', compact('invoice', 'product', 'productsNumber'));

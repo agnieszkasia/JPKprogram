@@ -158,6 +158,7 @@ html, body {
     background-size: cover;
     position: sticky;
     height: 100%;
+    z-index: -1;
 }
 
 .bg2 {
@@ -168,6 +169,15 @@ html, body {
     background-size: cover;
     position: sticky;
     height: 100%;
+    width: 100%;
+    backdrop-filter: blur(5px) ;
+    z-index: -1;
+}
+
+.bg-blur {
+    position: fixed;
+    height: 100%;
+    width: 100%;
     backdrop-filter: blur(5px) ;
 }
 
@@ -199,6 +209,9 @@ html, body {
 .border-bottom-2 {
 
     border-bottom: 2px solid #ffffff;
+}
+.border-top-2{
+    border-top: 2px solid #1c1c1c;
 }
 
 .btn-light:focus, .btn-light:hover{

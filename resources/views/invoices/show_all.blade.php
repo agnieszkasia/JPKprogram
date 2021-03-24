@@ -3,14 +3,13 @@
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class=" card">
-{{--                <div class="card-header">--}}
-                    <div class="container-fluid mt-3 d-flex justify-content-between">
-                        <h3>FAKTURY</h3>
+            <div class="card mt-3">
+
+                <div class="mt-5 h3 text-center ">{{ __('FAKTURY') }}</div>
+                    <div class="container-fluid mt-3 d-flex justify-content-end">
                     <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
 
                     </div>
-{{--                </div>--}}
 
                 <div class="card-body">
                     <div class="container-xl">
@@ -36,7 +35,6 @@
                                     </div>
                                     <div>
                                         <div class="h5 mt-3">Kwota brutto: {{$price[$i]}}</div>
-{{--                                        <div class="h5">{{$item->street_name}} {{$item->house_number}}</div>--}}
 
                                     </div>
 

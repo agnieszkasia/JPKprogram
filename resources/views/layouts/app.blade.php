@@ -29,7 +29,7 @@
     <div id="wrapper" >
 
         <div id="sidebar-wrapper">
-            <ul class="sidebar-nav ">
+            <ul class="sidebar-nav">
                 <li class="text-center mt-5 " >
                     <div class="sidebar-brand">
 
@@ -106,14 +106,14 @@
         </div>
 
         <div id="page-content-wrapper">
-
-            <div class="container-fluid">
+            <a href="#menu-toggle" class="btn btn-light" style="position: static" id="menu-toggle">
+                <img style="height: 30px" src="{{asset('images/menu_icon.png')}}" alt="menuIcon" class="image">
+            </a>
+            <div class="container">
 
                 <div class="row">
                     <div class="col-lg-12">
-                        <a href="#menu-toggle" class="btn btn-light" id="menu-toggle">
-                            <img style="height: 30px" src="{{asset('images/menu_icon.png')}}" alt="menuIcon" class="image">
-                        </a>
+
                         @yield('content')
                     </div>
                 </div>
