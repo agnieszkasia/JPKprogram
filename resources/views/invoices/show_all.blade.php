@@ -7,8 +7,7 @@
 
                 <div class="mt-5 h3 text-center ">{{ __('FAKTURY') }}</div>
                     <div class="container-fluid mt-3 d-flex justify-content-end">
-                    <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
-
+                        <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
                     </div>
 
                 <div class="card-body">

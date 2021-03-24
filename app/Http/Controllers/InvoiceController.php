@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class InvoiceController extends Controller{
 
@@ -75,6 +77,14 @@ class InvoiceController extends Controller{
         return $products;
     }
 
+    public function getAuthUserData(){
+        $user = Auth::user();
+    }
+
+    public function getAuthUserInvoices(){
+
+    }
+
     public function show($id){
         $user = Auth::user();
 
@@ -136,4 +146,38 @@ class InvoiceController extends Controller{
         Invoice::find($id)->delete();
         return redirect(route('invoices'));
     }
+
+    public function generate_pdf($id){
+        $user = Auth::user();
+
+        $invoice = Invoice::find($id);
+
+        $products = explode(';',$invoice->products);
+        $productsNumber = count($products)/3;
+//        $all_products_price = array();
+        $all_products_price[0] = 0;
+        $all_products_price[1] = 0;
+        $all_products_price[2] =0;
+        for ($i=0; $i<$productsNumber; $i++){
+            $product[$i][0] = $products[$i*3];
+            $product[$i][1] = $products[$i*3+1];
+            $product[$i][2] = $products[$i*3+2];
+            $product[$i][3] = round($products[$i*3+2]*$products[$i*3+1]/1.23,2);
+            $product[$i][4] = round($products[$i*3+2]*$products[$i*3+1]/1.23*0.23,2);
+            $product[$i][5] = $products[$i*3+2]*$products[$i*3+1];
+            $all_products_price[0] = ($all_products_price[0] + $product[$i][3]);
+            $all_products_price[1] = ($all_products_price[1] + $product[$i][4]);
+            $all_products_price[2] = ($all_products_price[2] + $product[$i][5]);
+        }
+
+
+//        PDF::setOptions([
+//            'dpi'=>'150'
+//            ]);
+        $pdf = PDF::loadView('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
+        return view('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
+//        return $pdf->download('invoice.pdf');
+
+    }
+
 }
