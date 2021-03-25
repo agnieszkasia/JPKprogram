@@ -175,8 +175,8 @@ class InvoiceController extends Controller{
 //            'dpi'=>'150'
 //            ]);
         $pdf = PDF::loadView('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
-        return view('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
-//        return $pdf->download('invoice.pdf');
+//        return view('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
+        return $pdf->download('invoice.pdf');
 
     }
 
