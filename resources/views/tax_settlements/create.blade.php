@@ -12,52 +12,15 @@
 
                             <div class="col-lg-6">
 
-                                <div class="h5 mt-4">Tryb rozliczenia:</div>
-                                {{--Tryb rozliczenia--}}
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="form_type" type="radio" name="form_type" value="JPK_V7M" checked ><label for="form_type" class="col-form-label ml-2"> Miesięczny</label>
-                                    </div>
-                                    <div class="col">
-                                        <input id="form_type2" type="radio" name="form_type" value="JPK_V7K" ><label for="form_type2" class="col-form-label ml-2"> Kwartalny</label>
-                                    </div>
-                                </div>
-
-                                <div class="h5 mt-4">Cel złożenia:</div>
-                                {{--Cel złożenia--}}
-                                <div class="row">
-                                    <div class="col">
-                                        <input id="purpose_of_submission" type="radio" name="form_type" value="1" checked ><label for="purpose_of_submission" class="col-form-label ml-2"> Złożenie po raz pierwszy</label>
-                                    </div>
-                                    <div class="col">
-                                        <input id="purpose_of_submission2" type="radio" name="form_type" value="2" ><label for="purpose_of_submission2" class="col-form-label ml-2"> Korekta</label>
-                                    </div>
-                                </div>
-
-                                <div class="h5 mt-4 flex-column">Elementy struktury:</div>
-                                {{--Elementy struktury--}}
-                                <div class=" ">
-                                    <div class="">
-                                        <input id="structure_elements" type="radio" name="form_type" value="1" checked ><label for="structure_elements" class="col-form-label ml-2">Ewidencja, deklaracja</label>
-                                    </div>
-                                    <div class="">
-                                        <input id="structure_elements2" type="radio" name="form_type" value="2" ><label for="structure_elements2" class="col-form-label ml-2">Ewidencja</label>
-                                    </div>
-                                    <div class="">
-                                        <input id="structure_elements3" type="radio" name="form_type" value="3" ><label for="structure_elements3" class="col-form-label ml-2">Deklaracja</label>
-                                    </div>
-                                </div>
-
                                 <div class="row mt-lg-4">
                                     {{--Ulica--}}
                                     <div class="col-sm-8">
-                                        <input id="street_name" type="text" class="form-control @error('street_name') is-invalid @enderror" name="street_name" value="{{ old('street_name') }}" placeholder="Ulica" required autocomplete="address_line1" >
-
-                                        @error('street_name')
-                                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                        @enderror
+                                        <select class="form-control input-group-sm" name="year">
+                                            <option value="">Wybierz...</option>
+                                            @foreach($unique_year as $row)
+                                                <option value="{{$row}}">{{$row}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                     {{--numer budynku--}}
                                     <div class="col-sm-4">
@@ -196,20 +159,40 @@
     </div>
 
     <script>
+        $(function () {
+            var loader = $('#loader'),
+                category = $('select[name="category_id"]'),
+                subcategory = $('select[name="subcategory_id"]');
 
-        $('thead').on('click', '.addRow', function (){
-            var tr = "<tr id='group[ ]'>" +
-                "<td><input type='text' name='name[ ]' class='form-control'></td>" +
-                "<td><input type='text' name='quantity[ ]' class='form-control'></td>" +
-                "<td><input type='text' name='price[ ]' class='form-control'></td>" +
-                "<th><a href='javascript:void(0)' class='btn btn-danger deleteRow'>Usuń</a> </th>" +
-            "</tr>"
+            loader.hide();
+            subcategory.attr('disabled','disabled')
 
-            $('tbody').append(tr);
-        });
+            subcategory.change(function(){
+                var id = $(this).val();
+                if(!id){
+                    subcategory.attr('disabled','disabled')
+                }
+            })
 
-        $('tbody').on('click', '.deleteRow', function (){
-            $(this).parent().parent().remove();
+            category.change(function() {
+                var id= $(this).val();
+                if(id){
+                    loader.show();
+                    subcategory.attr('disabled','disabled')
+
+                    $.get('{{url('/dropdown-data?cat_id=')}}'+id)
+                        .success(function(data){
+                            var s='<option value="">---select--</option>';
+                            data.forEach(function(row){
+                                s +='<option value="'+row.id+'">'+row.name+'</option>'
+                            })
+                            subcategory.removeAttr('disabled')
+                            subcategory.html(s);
+                            loader.hide();
+                        })
+                }
+
+            })
         })
     </script>
 
