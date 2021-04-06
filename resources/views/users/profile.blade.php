@@ -71,7 +71,7 @@
                 <div class="mt-5 mb-3 h3 text-center ">{{ __('Informacje dodatkowe o firmie') }}</div>
 
                 <div class="card-body mb-5 mr-3">
-                    @if($user->companyTaxInformation==null)
+                    @if($user->companyTaxInformation == null)
                         <div class="form-group row mb-0 justify-content-end">
                             <div class=" mr-4">
                                 <a href="{{ url('/companyinformation/add') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj informacje</a>

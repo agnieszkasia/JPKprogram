@@ -13,17 +13,18 @@ class UserController extends Controller
         $companyTaxInformation = $user->companyTaxInformation;
 
 //        dd($company_tax_information);
-        if($companyTaxInformation->settlement_form == 'JPK_V7M'){
-            $companyTaxInformation->settlement_form = 'Miesięczny';
-        } elseif($companyTaxInformation->settlement_form == 'JPK_V7K'){
-            $companyTaxInformation->settlement_form = 'Kwartalny';
+        if ($companyTaxInformation) {
+            if ($companyTaxInformation->settlement_form == 'JPK_V7M') {
+                $companyTaxInformation->settlement_form = 'Miesięczny';
+            } elseif ($companyTaxInformation->settlement_form == 'JPK_V7K') {
+                $companyTaxInformation->settlement_form = 'Kwartalny';
+            }
+            if ($companyTaxInformation->entity_type == '1') {
+                $companyTaxInformation->entity_type = 'Osoba fizyczna';
+            } elseif ($companyTaxInformation->entity_type == '2') {
+                $companyTaxInformation->entity_type = 'Osoba niefizyczna';
+            }
         }
-        if($companyTaxInformation->entity_type == '1'){
-            $companyTaxInformation->entity_type = 'Osoba fizyczna';
-        } elseif($companyTaxInformation->entity_type == '2'){
-            $companyTaxInformation->entity_type = 'Osoba niefizyczna';
-        }
-
         return view('users/profile', compact('user', 'companyTaxInformation'));
     }
 
