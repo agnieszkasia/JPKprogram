@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+//use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -58,6 +58,10 @@ class User extends Authenticatable
 
     public function magazine(){
         return $this->hasOne(Magazine::class);
+    }
+
+    public function companyTaxInformation(){
+        return $this->hasOne(CompanyTaxInformation::class);
     }
 
 

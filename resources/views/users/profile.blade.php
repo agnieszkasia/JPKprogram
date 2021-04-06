@@ -66,6 +66,46 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card bg-text" style="margin-top: 5%">
+                <div class="mt-5 mb-3 h3 text-center ">{{ __('Informacje dodatkowe o firmie') }}</div>
+
+                <div class="card-body mb-5 mr-3">
+                    @if($user->companyTaxInformation==null)
+                        <div class="form-group row mb-0 justify-content-end">
+                            <div class=" mr-4">
+                                <a href="{{ url('/companyinformation/add') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj informacje</a>
+                            </div>
+                        </div>
+                    @else
+
+                    {{--Rozliczenie miesięczne/kwartalne--}}
+                    <div class="row mt-sm-4">
+                        <div class="col-sm-2 text-md-right">{{ __('Tryb rozliczenia')}}</div>
+                        <div class="col-sm-10"><b>{{ $companyTaxInformation->settlement_form }}</b> </div>
+                    </div>
+
+                    {{--Podmiot--}}
+                    <div class="row mt-sm-4">
+                        <div class="col-sm-2 text-md-right">{{ __('Podmiot') }}</div>
+                        <div class="col-sm-10"><b>{{ $companyTaxInformation->entity_type }}</b> </div>
+                    </div>
+
+                    {{--Kod urzędu--}}
+                    <div class="row mt-sm-4">
+                        <div class="col-sm-2 text-md-right">{{ __('Kod urzędu') }}</div>
+                        <div class="col-sm-10"><b>{{ $companyTaxInformation->office_code }}</b> </div>
+                    </div>
+
+                    <div class="form-group row mb-0 justify-content-end">
+                        <div class=" mr-4">
+                            <a href="{{ url('/profile/'.$user->id.'/edit') }}" class="btn btn-dark" role="button" aria-pressed="true">Edytuj</a>
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection

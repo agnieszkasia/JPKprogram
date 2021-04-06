@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade as PDF;
+
 
 class InvoiceController extends Controller{
 
@@ -22,8 +22,8 @@ class InvoiceController extends Controller{
 //            dd($productsData);
             $price[$i] = 0;
             for ($j=0; $j<$productsNumber;$j++){
-                $product[$j] = $productsData[$j*3+2];
-                $price[$i] = $price[$i]+$product[$j];
+                $product_price[$j] = $productsData[$j*3+2];
+                $price[$i] = $price[$i]+(int)$product_price[$j];
             }
         }
         return view('invoices/show_all', compact('invoices', 'price'));
@@ -36,7 +36,7 @@ class InvoiceController extends Controller{
         } else {
             $invoice_number_temp = (int)$last_invoice->invoice_number;
         }
-        $invoice_number = ($invoice_number_temp+1)."/".Carbon::now()->year;
+        $invoice_number = ($invoice_number_temp+1)."_".Carbon::now()->year;
         $currentDate = Carbon::now()->toDateString();
         return view('invoices.create', compact('currentDate', 'invoice_number'));
     }
@@ -78,11 +78,12 @@ class InvoiceController extends Controller{
     }
 
     public function getAuthUserData(){
-        $user = Auth::user();
+        return $user = Auth::user();
     }
 
     public function getAuthUserInvoices(){
-
+        $user = $this->getAuthUserData();
+        return $invoices = $user->invoices;
     }
 
     public function show($id){
@@ -92,7 +93,6 @@ class InvoiceController extends Controller{
 
         $products = explode(';',$invoice->products);
         $productsNumber = count($products)/3;
-//        $all_products_price = array();
         $all_products_price[0] = 0;
         $all_products_price[1] = 0;
         $all_products_price[2] =0;
@@ -152,9 +152,9 @@ class InvoiceController extends Controller{
 
         $invoice = Invoice::find($id);
 
+        $product = array();
         $products = explode(';',$invoice->products);
         $productsNumber = count($products)/3;
-//        $all_products_price = array();
         $all_products_price[0] = 0;
         $all_products_price[1] = 0;
         $all_products_price[2] =0;
@@ -169,14 +169,15 @@ class InvoiceController extends Controller{
             $all_products_price[1] = ($all_products_price[1] + $product[$i][4]);
             $all_products_price[2] = ($all_products_price[2] + $product[$i][5]);
         }
+        $invoice_name = "FV-".$invoice->invoice_number.".pdf";
 
+        $html = view('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
 
-//        PDF::setOptions([
-//            'dpi'=>'150'
-//            ]);
-        $pdf = PDF::loadView('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
-//        return view('invoices/pdf', compact('invoice', 'product', 'productsNumber', 'user', 'all_products_price'));
-        return $pdf->download('invoice.pdf');
+        $dompdf = new \Dompdf\Dompdf();
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+        $dompdf->stream((string)$invoice_name, ['Attachment' => true]);
+
 
     }
 

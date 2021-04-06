@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Magazine extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'user_id',
     ];
 
 
-    public function products()
-    {
+    public function products(){
         return $this->belongsToMany(Product::class, 'product_magazine', 'magazine_id', 'product_id');
     }
 

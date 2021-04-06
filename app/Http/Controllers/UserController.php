@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Validation\Validator;
+//use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,7 +10,21 @@ class UserController extends Controller
 {
     public function index(){
         $user = Auth::user();
-        return view('users/profile', compact('user'));
+        $companyTaxInformation = $user->companyTaxInformation;
+
+//        dd($company_tax_information);
+        if($companyTaxInformation->settlement_form == 'JPK_V7M'){
+            $companyTaxInformation->settlement_form = 'Miesięczny';
+        } elseif($companyTaxInformation->settlement_form == 'JPK_V7K'){
+            $companyTaxInformation->settlement_form = 'Kwartalny';
+        }
+        if($companyTaxInformation->entity_type == '1'){
+            $companyTaxInformation->entity_type = 'Osoba fizyczna';
+        } elseif($companyTaxInformation->entity_type == '2'){
+            $companyTaxInformation->entity_type = 'Osoba niefizyczna';
+        }
+
+        return view('users/profile', compact('user', 'companyTaxInformation'));
     }
 
     public function create(){
