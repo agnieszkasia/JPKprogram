@@ -30,14 +30,15 @@ Route::group(['middleware' => ['auth']], function (){
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+    Route::get('/companyinformation/add', [CompanyTaxInformationController::class, 'create']);
+    Route::post('/companyinformation/store', [CompanyTaxInformationController::class, 'store'])->name('store_company_tax_information');
+    Route::get('/companyinformation/{id}/edit', [CompanyTaxInformationController::class, 'edit']);
+    Route::post('/companyinformation/{id}/update', [CompanyTaxInformationController::class, 'update']);
+
     /* profile routes */
     Route::get('/profile', [UserController::class, 'index'])->name('profile');
     Route::get('/profile/{id}/edit', [UserController::class, 'edit']);
     Route::post('/profile/{id}/update', [UserController::class, 'update']);
-
-
-    Route::get('/companyinformation/add', [CompanyTaxInformationController::class, 'create']);
-    Route::post('/companyinformation/store', [CompanyTaxInformationController::class, 'store'])->name('store_tax_settlement');
 
     /* invoices routes */
     Route::get('/invoices', [InvoiceController::class, 'showAll'])->name('invoices');
