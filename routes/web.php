@@ -4,6 +4,7 @@ use App\Http\Controllers\CompanyTaxInformationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseInvoiceController;
 use App\Http\Controllers\TaxSettlementController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,7 @@ Route::group(['middleware' => ['auth']], function (){
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+    /* company inforamtion routes */
     Route::get('/companyinformation/add', [CompanyTaxInformationController::class, 'create']);
     Route::post('/companyinformation/store', [CompanyTaxInformationController::class, 'store'])->name('store_company_tax_information');
     Route::get('/companyinformation/{id}/edit', [CompanyTaxInformationController::class, 'edit']);
@@ -50,10 +52,20 @@ Route::group(['middleware' => ['auth']], function (){
     Route::get('/invoice/{id}/edit', [InvoiceController::class, 'edit']);
     Route::post('/invoice/{id}/update', [InvoiceController::class, 'update']);
 
+    /* purchase invoices routes*/
+    Route::get('/purchaseinvoices', [PurchaseInvoiceController::class, 'showAll'])->name('purchase_invoices');
+    Route::get('/purchaseinvoices/create', [PurchaseInvoiceController::class, 'create'])->name('create_purchase_invoice');
+    Route::post('/purchaseinvoices/store', [PurchaseInvoiceController::class, 'store'])->name('store_purchase_invoice');
+    Route::get('/purchaseinvoices/{id}', [PurchaseInvoiceController::class, 'show']);
+    Route::get('/purchaseinvoices/{id}/delete', [PurchaseInvoiceController::class, 'destroy']);
+    Route::get('/purchaseinvoices/{id}/edit', [PurchaseInvoiceController::class, 'edit']);
+    Route::post('/purchaseinvoices/{id}/update', [PurchaseInvoiceController::class, 'update']);
+
     /* tax settlements routes */
-    Route::get('/settlements', [TaxSettlementController::class, 'showAllTaxSettlement'])->name('show_tax_settlement');
+    Route::get('/settlements', [TaxSettlementController::class, 'showAllTaxSettlement'])->name('show_tax_settlements');
     Route::get('/settlements/create', [TaxSettlementController::class, 'create'])->name('create_tax_settlement');
-    Route::get('/settlements/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
+    Route::post('/settlements/generate', [TaxSettlementController::class, 'generate'])->name('generate_tax_settlement');
+    Route::post('/settlements/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
 
     Route::get('/corrections/create', [TaxSettlementController::class, 'createCorrection'])->name('create_tax_correction');
     Route::post('/corrections/store', [TaxSettlementController::class, 'storeCorrection'])->name('store_tax_correction');

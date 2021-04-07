@@ -55,17 +55,13 @@
                                 <div class="h5 mt-4">Kod urzędu:</div>
                                 <div class="row">
                                     <div class="col">
-                                        <select id="office_code" type="text" class="form-control select" data-placeholder="Wybierz..." name="office_code" >
-{{--                                            <option value="{{$company_tax_information->office_code}}">{{$company_tax_information->office_code}}</option>--}}
+                                        <input list="office_codes" class="form-control select" id="office_code" name="office_code" value="{{$company_tax_information->office_code}}">
+                                        <datalist id="office_codes">
+                                            {{--                                            <option value="" class="dropdown-item">Wybierz...</option>--}}
                                             @for($i=0; $i<$lineCount; $i++)
-                                                <option value="{{ $data[$i] }}"
-                                                @if($data[$i] == $company_tax_information->office_code )
-                                                    selected
-                                                @endif
-                                                    >{{ $data[$i] }}</option>
+                                                <option value="{{ $data[$i] }}" class="form-control">
                                             @endfor
-                                        </select>
-
+                                        </datalist>
                                     </div>
                                 </div>
                             </div>
@@ -82,6 +78,12 @@
             </div>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function () {
+            $('select').selectize({
+                sortField: 'text'
+            });
+        });
+    </script>
 
 @endsection

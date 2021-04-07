@@ -11,11 +11,21 @@ class CreateTaxSettlementsTable extends Migration
      *
      * @return void
      */
-    public function up()
-    {
+    public function up(){
         Schema::create('tax_settlements', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('user_id');
+            $table->string('form_code');
+            $table->string('form_variant');
+            $table->string('date');
+            $table->string('system_name');
+            $table->string('purpose_of_submission');
+            $table->string('office_code');
+            $table->string('year');
+            $table->string('month');
+            $table->string('invoice_ids');
+            $table->string('number_of_invoices');
+            $table->string('vat');
         });
     }
 

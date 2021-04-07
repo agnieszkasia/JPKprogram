@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Invoice extends Model
+class PurchaseInvoice extends Model
 {
     use HasFactory;
 
@@ -18,9 +18,11 @@ class Invoice extends Model
         'postal_code',
         'city',
         'nip',
-        'products',
         'issue_date',
-        'due_date'
+        'due_date',
+        'vat',
+        'netto',
+        'brutto'
     ];
 
 

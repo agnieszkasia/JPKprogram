@@ -1,23 +1,18 @@
 @extends('layouts.app')
 
-@section('head_content')
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/repeater.js') }}" defer></script>
-@endsection
-
 @section('content')
     <div class="row justify-content-center">
         <div class="col-md-12 mt-3">
             <div class="card">
-                <div class="mt-5 h3 text-center ">{{ __('Dodaj fakturę') }}</div>
+                <div class="mt-5 h3 text-center ">{{ __('Dodaj fakturę zakupu') }}</div>
                 <div class="my-5">
-                    <form method="POST" action="{{ route('store_invoice') }}" id="repeater_form">
+                    <form method="POST" action="{{ route('store_purchase_invoice') }}" id="repeater_form">
                         @csrf
                         <div class="row mx-5">
 
                             <div class="col-lg-6">
 
-                                <div class="h5">Dane nabywcy:</div>
+                                <div class="h5">Dane sprzedawcy:</div>
                                 {{--Nazwa firmy--}}
                                 <div class="row mt-lg-4">
                                     <div class="col">
@@ -91,15 +86,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-6 ">
+                            <div class="col-lg-5 offset-lg-1 ">
+
+                                <div class="h5">Dane faktury:</div>
 
                                 {{--Numer faktury--}}
-                                <div class="row mt-lg-5">
-                                    <div class="col-sm-5 offset-sm-2 h5 text-right">
-                                        <label for="invoice_number" class="col-form-label text-md-right">{{ __('Numer faktury') }}</label>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input id="invoice_number" type="text" class="form-control @error('invoice_number') is-invalid @enderror" name="invoice_number" value="{{ $invoice_number }}" required>
+                                <div class="row mt-lg-4">
+                                    <div class="col">
+                                        <input id="invoice_number" type="text" class="form-control @error('invoice_number') is-invalid @enderror" name="invoice_number" value="{{ old('invoice_number') }}" placeholder="Numer faktury" required >
 
                                         @error('invoice_number')
                                         <span class="invalid-feedback" role="alert">
@@ -108,13 +102,12 @@
                                         @enderror
                                     </div>
                                 </div>
+
                                 {{--Data wystawienia--}}
-                                <div class="row mt-lg-2">
-                                    <div class=" offset-sm-1 col-sm-6 h5 text-right">
-                                        <label for="issue_date" class="col-form-label text-md-right">{{ __('Data wystawienia') }}</label>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input id="issue_date" type="date" class="form-control @error('issue_date') is-invalid @enderror" name="issue_date" value="{{ $currentDate }}" required autocomplete="issue_date" >
+                                <div class="h5 mt-lg-4">Data wystawienia:</div>
+                                <div class="row ">
+                                    <div class="col">
+                                        <input id="issue_date" type="date" class="form-control @error('issue_date') is-invalid @enderror" name="issue_date" value="{{ old('issue_date') }}" placeholder="123" required >
 
                                         @error('issue_date')
                                         <span class="invalid-feedback" role="alert">
@@ -125,47 +118,61 @@
                                 </div>
 
                                 {{--Data sprzedazy--}}
-                                <div class="row  mt-lg-2">
-                                    <div class="col-sm-5 offset-sm-2 h5 text-right">
-                                        <label for="due_date" class="col-form-label text-md-right">{{ __('Data sprzedaży') }}</label>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <input id="due_date" type="date" class="form-control @error('due_date') is-invalid @enderror" name="due_date" value="{{ $currentDate }}" required autocomplete="due_date" >
+                                <div class="h5 mt-lg-4">Data sprzedaży:</div>
+                                <div class="row ">
+                                    <div class="col">
+                                        <input id="due_date" type="date" class="form-control @error('due_date') is-invalid @enderror" name="due_date" value="{{ old('due_date') }}" required>
 
                                         @error('due_date')
                                         <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12 mt-lg-4">
+                            <div class="h5 mt-lg-4">Kwota całkowita:</div>
+
+                                <div class="row mt-lg-4">
+
+                                    {{--Wartość VAT--}}
+                                    <div class="col-sm-4">
+                                        <input id="vat" type="text" class="form-control @error('vat') is-invalid @enderror" name="vat" value="{{ old('vat') }}" placeholder="VAT" required >
+
+                                        @error('vat')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Netto --}}
+                                    <div class="col-sm-4">
+                                        <input id="netto" type="text" class="form-control @error('netto') is-invalid @enderror" name="netto" value="{{ old('netto') }}" placeholder="Netto" required>
+
+                                        @error('netto')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- Brutto --}}
+                                    <div class="col-sm-4">
+                                        <input id="brutto" type="text" class="form-control @error('brutto') is-invalid @enderror" name="brutto" value="{{ old('brutto') }}" placeholder="Brutto" required>
+
+                                        @error('brutto')
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
                                         @enderror
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="mt-lg-4 col-lg-12 bg-white">
-                            {{--Pozycje faktury--}}
-                            <div class="form-group row child-repeater-table mx-5">
-                                <table class="table table-borderless table-responsive">
-                                    <thead>
-                                    <tr>
-                                        <th class="col-1 h5">Nazwa produktu/usługi</th>
-                                        <th class="col-md-2 h5">Ilość</th>
-                                        <th class="col-md-2 h5" >Cena jednostkowa</th>
-                                        <th><a href="javascript:void(0)" class="btn btn-success addRow">+</a> </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td><input type="text" name="name[ ]" class="form-control" autocomplete=""></td>
-                                        <td><input type="text" name="quantity[ ]" class="form-control"></td>
-                                        <td><input type="text" name="price[ ]" class="form-control"></td>
-                                        <th><a href="javascript:void(0)" class="btn btn-danger deleteRow">Usuń</a> </th>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
-
 
                         <div class="col-md-12 mb-0 justify-content-end ">
                             <div class="text-right mt-3 ">
@@ -177,23 +184,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-
-        $('thead').on('click', '.addRow', function (){
-            var tr = "<tr id='group[ ]'>" +
-                "<td><input type='text' name='name[ ]' class='form-control'></td>" +
-                "<td><input type='text' name='quantity[ ]' class='form-control'></td>" +
-                "<td><input type='text' name='price[ ]' class='form-control'></td>" +
-                "<th><a href='javascript:void(0)' class='btn btn-danger deleteRow'>Usuń</a> </th>" +
-            "</tr>"
-
-            $('tbody').append(tr);
-        });
-
-        $('tbody').on('click', '.deleteRow', function (){
-            $(this).parent().parent().remove();
-        })
-    </script>
 
 @endsection
