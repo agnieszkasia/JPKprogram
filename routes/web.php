@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth']], function (){
     Route::get('/settlement/create', [TaxSettlementController::class, 'create'])->name('create_tax_settlement');
     Route::post('/settlement/generate', [TaxSettlementController::class, 'generate'])->name('generate_tax_settlement');
     Route::post('/settlement/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
+    Route::get('/settlement/{id}', [TaxSettlementController::class, 'show']);
     Route::get('/settlement/{id}/delete', [TaxSettlementController::class, 'destroy']);
     Route::get('/settlement/{id}/generateXML', [TaxSettlementController::class, 'generateXMLFile']);
 

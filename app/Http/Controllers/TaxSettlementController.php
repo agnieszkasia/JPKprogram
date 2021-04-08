@@ -145,6 +145,25 @@ class TaxSettlementController extends Controller{
         return redirect(route('show_tax_settlements'));
     }
 
+    public function show($id){
+        $taxSettlement = TaxSettlement::find($id);
+        $salesInvoiceIds = explode(';',$taxSettlement->sales_invoice_ids);
+        $purchaseInvoiceIds = explode(';',$taxSettlement->purchase_invoice_ids);
+        $i = 0;
+        foreach ($salesInvoiceIds as $invoiceId) {
+            $salesInvoicesData[$i] = Invoice::find($invoiceId);
+            $i++;
+        }
+        $i=0;
+        foreach ($purchaseInvoiceIds as $invoiceId) {
+            $purchaseInvoicesData[$i] = PurchaseInvoice::find($invoiceId);
+            $i++;
+        }
+
+        return view('tax_settlements.show',compact('taxSettlement', 'salesInvoicesData', 'purchaseInvoicesData'));
+
+    }
+
     public function destroy($id){
         TaxSettlement::find($id)->delete();
         return redirect(route('show_tax_settlements'));
@@ -324,18 +343,18 @@ class TaxSettlementController extends Controller{
 
 
         /*download file */
-        $file->save('test.xml');
-        $file = 'test.xml';
+        $filename = $taxSettlement->form_code.' '.$taxSettlement->year.'_'.$taxSettlement->month.' - zlozenie po raz pierwszy - '.'.xml';
+        $file->save($filename);
 
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header("Cache-Control: no-cache, must-revalidate");
         header("Expires: 0");
-        header('Content-Disposition: attachment; filename="'.basename($file).'"');
-        header('Content-Length: ' . filesize($file));
+        header('Content-Disposition: attachment; filename="'.basename($filename).'"');
+        header('Content-Length: ' . filesize($filename));
         header('Pragma: public');
-        readfile($file);
-        unlink($file);
+        readfile($filename);
+        unlink($filename);
 
     }
 
