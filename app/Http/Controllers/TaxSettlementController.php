@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
+use App\Models\PurchaseInvoice;
 use App\Models\TaxSettlement;
 use Carbon\Carbon;
 use DOMDocument;
@@ -153,8 +155,8 @@ class TaxSettlementController extends Controller{
         $entity = $user->companyTaxInformation;
         $entityTypeName = $entity->entity_type;
 
-
         $taxSettlement = TaxSettlement::find($id);
+
 
         $file = new DOMDocument();
 
@@ -304,9 +306,22 @@ class TaxSettlementController extends Controller{
                     $declarationFormVariant = $file->createElement("WariantFormularzaDekl", '21');
                     $declarationHead->appendChild($declarationFormVariant);
 
+                /* tag - PozycjeSzczegolowe */
+                $detailedItems = $file->createElement("PozycjeSzczegolowe");
+                $declaration->appendChild($detailedItems);
+
+                    /* tag - P_ORDZU */
+                    $P_ORDZU = $file->createElement("P_ORDZU", 'null');
+                    $detailedItems->appendChild($P_ORDZU);
+
+
             /* tag - Ewidencja */
             $register = $file->createElement("Ewidencja");
             $JPK->appendChild($register);
+
+            $this->getSalesInvoicesToXMLFormat($taxSettlement, $register, $file);
+            $this->getPurchaseInvoicesToXMLFormat($taxSettlement, $register, $file);
+
 
         /*download file */
         $file->save('test.xml');
@@ -321,6 +336,128 @@ class TaxSettlementController extends Controller{
         header('Pragma: public');
         readfile($file);
         unlink($file);
+
+    }
+
+    public function getSalesInvoicesToXMLFormat($taxSettlement, $register, $file){
+
+        $salesInvoiceIds = explode(';',$taxSettlement->sales_invoice_ids);
+
+        foreach ($salesInvoiceIds as $invoiceId){
+
+            $invoice = Invoice::find($invoiceId);
+
+            /* tag - SprzedazWiersz */
+            $salesRow = $file->createElement("SprzedazWiersz");
+            $register->appendChild($salesRow);
+
+                /* tag - LpSprzedazy */
+                $sales = $file->createElement("LpSprzedazy", ($invoiceId+1));
+                $salesRow->appendChild($sales);
+
+                /* tag - NrKontrahenta */
+                $nip = $file->createElement("NrKontrahenta", $invoice->nip);
+                $salesRow->appendChild($nip);
+
+                /* tag - NazwaKontrahenta */
+                $company = $file->createElement("NazwaKontrahenta", $invoice->company);
+                $salesRow->appendChild($company);
+
+                /* tag - DowodSprzedazy */
+                $invoiceNumber = $file->createElement("DowodSprzedazy", $invoice->invoice_number);
+                $salesRow->appendChild($invoiceNumber);
+
+                /* tag - DataWystawienia */
+                $issueDate = $file->createElement("DataWystawienia", $invoice->issue_date);
+                $salesRow->appendChild($issueDate);
+
+                /* tag - DataSprzedazy */
+                $dueDate = $file->createElement("DataSprzedazy", $invoice->due_date);
+                $salesRow->appendChild($dueDate);
+
+                /* tag - K_19 */
+                $netto = $file->createElement("K_19", $invoice->netto);
+                $salesRow->appendChild($netto);
+
+                /* tag - K_20 */
+                $vat = $file->createElement("K_20", $invoice->vat);
+                $salesRow->appendChild($vat);
+
+        }
+
+        /* tag - SprzedazCtrl */
+        $salesCtrl = $file->createElement("SprzedazCtrl");
+        $register->appendChild($salesCtrl);
+
+        /* tag - LiczbaWierszySprzedazy */
+        $rowNumber = $file->createElement("LiczbaWierszySprzedazy", $taxSettlement->number_of_sale_invoices);
+        $salesCtrl->appendChild($rowNumber);
+
+        /* tag - PodatekNalezny */
+        $totalVAT = $file->createElement("PodatekNalezny", $taxSettlement->sale_vat);
+        $salesCtrl->appendChild($totalVAT);
+
+
+    }
+
+    public function getPurchaseInvoicesToXMLFormat($taxSettlement, $register, $file){
+        if ($taxSettlement->purchase_invoice_ids !== "") {
+            $purchaseInvoiceIds = explode(';', $taxSettlement->purchase_invoice_ids);
+            foreach ($purchaseInvoiceIds as $invoiceId) {
+
+                $invoice = PurchaseInvoice::find($invoiceId);
+
+                /* tag - ZakupWiersz */
+                $purchaseRow = $file->createElement("ZakupWiersz");
+                $register->appendChild($purchaseRow);
+
+                    /* tag - LpZakupu */
+                    $sales = $file->createElement("LpZakupu", ($invoiceId + 1));
+                    $purchaseRow->appendChild($sales);
+
+                    /* tag - NrDostawcy */
+                    $nip = $file->createElement("NrDostawcy", $invoice->nip);
+                    $purchaseRow->appendChild($nip);
+
+                    /* tag - NazwaDostawcy */
+                    $company = $file->createElement("NazwaDostawcy", $invoice->company);
+                    $purchaseRow->appendChild($company);
+
+                    /* tag - DowodZakupu */
+                    $invoiceNumber = $file->createElement("DowodZakupu", $invoice->invoice_number);
+                    $purchaseRow->appendChild($invoiceNumber);
+
+                    /* tag - DataZakupu */
+                    $issueDate = $file->createElement("DataZakupu", $invoice->issue_date);
+                    $purchaseRow->appendChild($issueDate);
+
+                    /* tag - DataWplywu */
+                    $dueDate = $file->createElement("DataWplywu", $invoice->due_date);
+                    $purchaseRow->appendChild($dueDate);
+
+                    /* tag - K_42 */
+                    $netto = $file->createElement("K_42", $invoice->netto);
+                    $purchaseRow->appendChild($netto);
+
+                    /* tag - K_43 */
+                    $vat = $file->createElement("K_43", $invoice->vat);
+                    $purchaseRow->appendChild($vat);
+
+            }
+
+            /* tag - ZakupCtrl */
+            $purchaseCtrl = $file->createElement("ZakupCtrl");
+            $register->appendChild($purchaseCtrl);
+
+            /* tag - LiczbaWierszyZakupow */
+            $rowNumber = $file->createElement("LiczbaWierszyZakupow", $taxSettlement->number_of_purchase_invoices);
+            $purchaseCtrl->appendChild($rowNumber);
+
+            /* tag - PodatekNaliczony */
+            $totalVAT = $file->createElement("PodatekNaliczony", $taxSettlement->purchase_vat);
+            $purchaseCtrl->appendChild($totalVAT);
+
+        }
 
     }
 }
