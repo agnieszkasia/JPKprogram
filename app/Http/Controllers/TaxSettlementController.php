@@ -308,9 +308,19 @@ class TaxSettlementController extends Controller{
             $register = $file->createElement("Ewidencja");
             $JPK->appendChild($register);
 
+        /*download file */
+        $file->save('test.xml');
+        $file = 'test.xml';
 
-        $file->save("test.xml");
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header("Cache-Control: no-cache, must-revalidate");
+        header("Expires: 0");
+        header('Content-Disposition: attachment; filename="'.basename($file).'"');
+        header('Content-Length: ' . filesize($file));
+        header('Pragma: public');
+        readfile($file);
+        unlink($file);
 
     }
-
 }
