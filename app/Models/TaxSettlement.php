@@ -20,9 +20,15 @@ class TaxSettlement extends Model{
         'year', //Rok
         'month', //Miesiac
 
-        'invoice_ids',
-        'number_of_invoices', //LiczbaWierszySprzedazy
-        'vat', //PodatekNalezny
+        'sales_invoice_ids',
+        'number_of_sale_invoices', //LiczbaWierszySprzedazy
+        'sale_vat', //PodatekNalezny
+        'sale_brutto',
+
+        'purchase_invoice_ids',
+        'number_of_purchase_invoices', //
+        'purchase_vat', //
+        'purchase_brutto'
     ];
 
     public function user(){

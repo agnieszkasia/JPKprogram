@@ -99,9 +99,9 @@
                                     <tr class="h5">
                                         <td colspan="2" ></td>
                                         <td>Suma</td>
-                                        <td>{{$all_products_price[0]}}</td>
-                                        <td>{{$all_products_price[1]}}</td>
-                                        <td>{{$all_products_price[2]}}</td>
+                                        <td>{{$invoice->vat}}</td>
+                                        <td>{{$invoice->netto}}</td>
+                                        <td>{{$invoice->brutto}}</td>
                                     </tr>
                                     </tbody>
                                 </table>

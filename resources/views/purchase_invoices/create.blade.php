@@ -133,12 +133,15 @@
 
                             </div>
                             <div class="col-lg-12 mt-lg-4">
-                            <div class="h5 mt-lg-4">Kwota całkowita:</div>
 
                                 <div class="row mt-lg-4">
 
+                                    <div class="col-sm-3 text-right">
+                                        <div class="h5 mt-lg-2">Kwota całkowita:</div>
+                                    </div>
+
                                     {{--Wartość VAT--}}
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <input id="vat" type="text" class="form-control @error('vat') is-invalid @enderror" name="vat" value="{{ old('vat') }}" placeholder="VAT" required >
 
                                         @error('vat')
@@ -149,7 +152,7 @@
                                     </div>
 
                                     {{-- Netto --}}
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <input id="netto" type="text" class="form-control @error('netto') is-invalid @enderror" name="netto" value="{{ old('netto') }}" placeholder="Netto" required>
 
                                         @error('netto')
@@ -160,7 +163,7 @@
                                     </div>
 
                                     {{-- Brutto --}}
-                                    <div class="col-sm-4">
+                                    <div class="col-sm-3">
                                         <input id="brutto" type="text" class="form-control @error('brutto') is-invalid @enderror" name="brutto" value="{{ old('brutto') }}" placeholder="Brutto" required>
 
                                         @error('brutto')

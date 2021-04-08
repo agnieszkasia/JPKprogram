@@ -20,7 +20,10 @@ class Invoice extends Model
         'nip',
         'products',
         'issue_date',
-        'due_date'
+        'due_date',
+        'vat',
+        'netto',
+        'brutto'
     ];
 
 

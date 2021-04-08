@@ -54,18 +54,20 @@ Route::group(['middleware' => ['auth']], function (){
 
     /* purchase invoices routes*/
     Route::get('/purchaseinvoices', [PurchaseInvoiceController::class, 'showAll'])->name('purchase_invoices');
-    Route::get('/purchaseinvoices/create', [PurchaseInvoiceController::class, 'create'])->name('create_purchase_invoice');
-    Route::post('/purchaseinvoices/store', [PurchaseInvoiceController::class, 'store'])->name('store_purchase_invoice');
-    Route::get('/purchaseinvoices/{id}', [PurchaseInvoiceController::class, 'show']);
-    Route::get('/purchaseinvoices/{id}/delete', [PurchaseInvoiceController::class, 'destroy']);
-    Route::get('/purchaseinvoices/{id}/edit', [PurchaseInvoiceController::class, 'edit']);
-    Route::post('/purchaseinvoices/{id}/update', [PurchaseInvoiceController::class, 'update']);
+    Route::get('/purchaseinvoice/create', [PurchaseInvoiceController::class, 'create'])->name('create_purchase_invoice');
+    Route::post('/purchaseinvoice/store', [PurchaseInvoiceController::class, 'store'])->name('store_purchase_invoice');
+    Route::get('/purchaseinvoice/{id}', [PurchaseInvoiceController::class, 'show']);
+    Route::get('/purchaseinvoice/{id}/delete', [PurchaseInvoiceController::class, 'destroy']);
+    Route::get('/purchaseinvoice/{id}/edit', [PurchaseInvoiceController::class, 'edit']);
+    Route::post('/purchaseinvoice/{id}/update', [PurchaseInvoiceController::class, 'update']);
 
     /* tax settlements routes */
     Route::get('/settlements', [TaxSettlementController::class, 'showAllTaxSettlement'])->name('show_tax_settlements');
-    Route::get('/settlements/create', [TaxSettlementController::class, 'create'])->name('create_tax_settlement');
-    Route::post('/settlements/generate', [TaxSettlementController::class, 'generate'])->name('generate_tax_settlement');
-    Route::post('/settlements/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
+    Route::get('/settlement/create', [TaxSettlementController::class, 'create'])->name('create_tax_settlement');
+    Route::post('/settlement/generate', [TaxSettlementController::class, 'generate'])->name('generate_tax_settlement');
+    Route::post('/settlement/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
+    Route::get('/settlement/{id}/delete', [TaxSettlementController::class, 'destroy']);
+    Route::get('/settlement/{id}/generateXML', [TaxSettlementController::class, 'generateXMLFile']);
 
     Route::get('/corrections/create', [TaxSettlementController::class, 'createCorrection'])->name('create_tax_correction');
     Route::post('/corrections/store', [TaxSettlementController::class, 'storeCorrection'])->name('store_tax_correction');

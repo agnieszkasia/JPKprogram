@@ -19,39 +19,42 @@
 
                 </div>
 
-                <div class="card-body">
-                    <div class="container-xl">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+                <div class="my-lg-5 bg-white">
+                    <div class="row mx-5">
+                        <table class="table table-borderless table-responsive">
+                            <thead>
+                            <tr class="border-bottom h6">
+                                <th style="width: 42%" >Okres rozliczeniowy</th>
+                                <th style="width: 12%" >Podatek należny</th>
+                                <th style="width: 12%" >Wartość sprzedaży</th>
+                                <th style="width: 12%" >Wartość zakupu</th>
+                                <th style="width: 18%">Data wytworzenia</th>
+                                <th style="width: 4%"></th>
+                            </tr>
+                            </thead>
 
+                            <tbody class="">
                             @for($i=0; $i<count($taxSettlements); $i++)
-                                <div class="mb-3 d-flex justify-content-between border-top">
-                                    <div class="flex-column mt-3">
-{{--                                        <div class="h5">{{$taxSettlements[$i]->company}}</div>--}}
-                                        <div class="h5">Okres rozliczeniowy: {{$taxSettlements[$i]->year}}-{{$taxSettlements[$i]->month}}</div>
-                                        <div class="h7">Data wytworzenia: {{$taxSettlements[$i]->date}}</div>
-                                        <div class="h7">Podatek należny: {{$taxSettlements[$i]->vat}} zł</div>
-                                    </div>
-                                    <div class="flex-column text-right">
-                                        <div class="mt-3 ">
-                                            <a href="{{ url('/taxSettlements/'.$taxSettlements[$i]->id) }}" class="btn btn-dark" role="button" aria-pressed="true">Podgląd</a>
-                                            <a href="{{ url('/taxSettlements/'.$taxSettlements[$i]->id.'/edit') }}" class="btn btn-dark" role="button" aria-pressed="true">Generuj XML</a>
-                                            <a href="{{ url('/taxSettlements/'.$taxSettlements[$i]->id.'/delete') }}" class="btn btn-dark" role="button" aria-pressed="true">Usuń</a>
+                                <tr class="border-bottom ">
+                                    <td>{{$taxSettlements[$i]->year}}-{{$taxSettlements[$i]->month}}</td>
+                                    <td >{{$taxSettlements[$i]->vat}} zł</td>
+                                    <td >{{$taxSettlements[$i]->sale_brutto}} zł</td>
+                                    <td >{{$taxSettlements[$i]->purchase_brutto}} zł</td>
+                                    <td>{{$taxSettlements[$i]->date}}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="{{ url('/settlement/'.$taxSettlements[$i]->id) }}">Podgląd</a>
+                                                <a class="dropdown-item" href="{{ url('/settlement/'.$taxSettlements[$i]->id.'/generateXML') }}">Generuj XML</a>
+                                                <a class="dropdown-item" href="{{ url('/settlement/'.$taxSettlements[$i]->id.'/delete') }}">Usuń</a>
+                                            </div>
                                         </div>
-                                        <div>
-{{--                                            <div class="h5 mt-3">Kwota brutto: {{$price[$i]}}</div>--}}
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
+                                    </td>
+                                </tr>
                             @endfor
-
-
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

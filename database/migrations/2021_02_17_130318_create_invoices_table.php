@@ -26,6 +26,9 @@ class CreateInvoicesTable extends Migration
             $table->string('products');
             $table->date('issue_date'); //data wystawienia
             $table->date('due_date'); //data sprzedazy
+            $table->string('vat');
+            $table->string('netto');
+            $table->string('brutto');
             $table->timestamps();
         });
     }

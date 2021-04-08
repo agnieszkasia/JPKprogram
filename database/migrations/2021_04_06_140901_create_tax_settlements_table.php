@@ -23,9 +23,14 @@ class CreateTaxSettlementsTable extends Migration
             $table->string('office_code');
             $table->string('year');
             $table->string('month');
-            $table->string('invoice_ids');
-            $table->string('number_of_invoices');
-            $table->string('vat');
+            $table->string('sales_invoice_ids');
+            $table->string('number_of_sale_invoices');
+            $table->string('sale_vat');
+            $table->string('sale_brutto');
+            $table->string('purchase_invoice_ids');
+            $table->string('number_of_purchase_invoices');
+            $table->string('purchase_vat');
+            $table->string('purchase_brutto');
         });
     }
 

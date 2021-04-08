@@ -4,47 +4,62 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card mt-3">
-
                 <div class="mt-5 h3 text-center ">{{ __('FAKTURY ZAKUPU') }}</div>
+
                     <div class="container-fluid mt-3 d-flex justify-content-end">
                         <a href="{{ route('create_purchase_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
                     </div>
 
-                <div class="card-body">
-                    <div class="container-xl">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
+                    <div class="my-lg-5 bg-white">
+                        <div class="row mx-5">
+                            <table class="table table-borderless table-responsive">
+                                <thead>
+                                    <tr class="border-bottom h6">
+                                        <th style="width: 30%" >Dane sprzedawcy</th>
+                                        <th style="width: 20%">Numer faktury</th>
+                                        <th style="width: 14%">Data wystawienia</th>
+                                        <th style="width: 14%">Data sprzedaży</th>
+                                        <th style="width: 6%">VAT</th>
+                                        <th style="width: 6%">Netto</th>
+                                        <th style="width: 6%">Brutto</th>
+                                        <th style="width: 4%"></th>
+                                    </tr>
+                                </thead>
 
-                        @for($i=0; $i<count($purchaseInvoices); $i++)
-                            <div class="mb-3 d-flex justify-content-between border-top">
-                                <div class="flex-column mt-3">
-                                    <div class="h5">{{$purchaseInvoices[$i]->company}}</div>
-                                    <div class="h5">{{$purchaseInvoices[$i]->street_name}} {{$purchaseInvoices[$i]->house_number}}</div>
-                                    <div class="h5">{{$purchaseInvoices[$i]->postal_code}} {{$purchaseInvoices[$i]->city}}</div>
-                                    <div class="h5">NIP: {{$purchaseInvoices[$i]->nip}}</div>
-                                </div>
-                                <div class="flex-column text-right">
-                                    <div class="mt-3 ">
-                                        <a href="{{ url('/purchaseinvoices/'.$purchaseInvoices[$i]->id) }}" class="btn btn-dark" role="button" aria-pressed="true">Podgląd</a>
-                                        <a href="{{ url('/purchaseinvoices/'.$purchaseInvoices[$i]->id.'/edit') }}" class="btn btn-dark" role="button" aria-pressed="true">Edytuj</a>
-                                        <a href="{{ url('/purchaseinvoices/'.$purchaseInvoices[$i]->id.'/delete') }}" class="btn btn-dark" role="button" aria-pressed="true">Usuń</a>
-                                    </div>
-                                    <div>
-{{--                                        <div class="h5 mt-3">Kwota brutto: {{$price[$i]}}</div>--}}
+                                <tbody class="">
+                                    @for($i=0; $i<count($purchaseInvoices); $i++)
+                                        <tr class="border-bottom ">
+                                            <td class="flex-column">
+                                                <div>{{$purchaseInvoices[$i]->company}}</div>
+                                                <div>{{$purchaseInvoices[$i]->street_name}} {{$purchaseInvoices[$i]->house_number}}</div>
+                                                <div>{{$purchaseInvoices[$i]->postal_code}} {{$purchaseInvoices[$i]->city}}</div>
+                                                <div>NIP: {{$purchaseInvoices[$i]->nip}}</div>
+                                            </td>
+                                            <td class="">{{$purchaseInvoices[$i]->invoice_number}}</td>
+                                            <td>{{$purchaseInvoices[$i]->issue_date}}</td>
+                                            <td>{{$purchaseInvoices[$i]->due_date}}</td>
 
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        @endfor
-
+                                            <td>{{$purchaseInvoices[$i]->vat}}</td>
+                                            <td>{{$purchaseInvoices[$i]->netto}}</td>
+                                            <td>{{$purchaseInvoices[$i]->brutto}}</td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoices[$i]->id) }}">Podgląd</a>
+                                                        <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoices[$i]->id.'/edit') }}">Edytuj</a>
+                                                        <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoices[$i]->id.'/delete') }}">Usuń</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endfor
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-</div>
+    </div>
 @endsection
