@@ -22,7 +22,8 @@ To run this project:
 * Go to the browser and type in URL field: localhost/JPKprogram/public
 
 ## Application functionality
-* Login, registration
+* Login, registration users
+* Change user password
 * Adding, viewing, editing, deleting sales invoices
 * Adding, viewing, editing, deleting purchase invoices
 * Generating sales invoices as PDF file
