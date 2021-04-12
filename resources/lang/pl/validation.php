@@ -160,6 +160,9 @@ return [
         'password' => [
             'confirmed' => 'Podane hasła nie są jednakowe.',
         ],
+        'confirm_password' => [
+            'same' => 'Nowe hasło oraz jego potwierdzenie nie są jednakowe.',
+        ],
 
     ],
 
@@ -186,6 +189,9 @@ return [
         'birth_date' => 'Data urodzenia',
         'email' => 'Email',
         'password' => 'Hasło',
+        'new_password' => 'nowe hasło',
+        'confirm_password' => 'Potwierdzenie ',
+        'old_password' => 'Hasło',
     ],
 
 ];

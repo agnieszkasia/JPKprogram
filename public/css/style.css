@@ -1,10 +1,14 @@
 /* side navbar wrapper*/
 #wrapper {
+    min-height: 100%;
+    top: 0;
     padding-left: 0;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all0.5s ease;
+    backdrop-filter: blur(5px) ;
+
 }
 
 #wrapper.toggled{
@@ -14,6 +18,7 @@
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
+    top: 0;
     left: 250px;
     width: 0;
     height: 100%;
@@ -41,6 +46,14 @@
     margin-right: -250px;
 }
 
+
+.nav-button{
+    z-index: 800;
+    position: fixed;
+    top: 20px;
+    left: 270px;
+}
+
 @media (min-width: 768px) {
     #wrapper {
         padding-left: 250px;
@@ -54,7 +67,11 @@
         width: 250px;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
+    #sidebar-wrapper.toggled{
+        width: 0;
+    }
+
+    #wrapper.toggled #sidebar-wrapper{
         width: 0;
     }
 
@@ -67,7 +84,14 @@
         position: relative;
         margin-right: 0;
     }
+
+    #menu-toggle.toggled{
+        left: 20px;
+    }
+
+
 }
+
 /* end - side navbar wrapper */
 
 /* sidebar links*/
@@ -167,7 +191,7 @@ html, body {
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    position: sticky;
+    position: fixed;
     height: 100%;
     width: 100%;
     backdrop-filter: blur(5px) ;

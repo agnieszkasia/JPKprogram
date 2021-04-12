@@ -62,7 +62,6 @@ class CompanyTaxInformationController extends Controller{
     }
 
     public function update(Request $request, $id){
-
         CompanyTaxInformation::find($id)->update([
             'settlement_form' => $request->input('settlement_form'),
             'entity_type' => $request->input('entity_type'),

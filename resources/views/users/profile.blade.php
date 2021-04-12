@@ -57,7 +57,7 @@
 
                     <div class="form-group row mb-0 justify-content-end">
                         <div class=" mr-4">
-                            <a href="{{ url('') }}" class="btn btn-dark" role="button" aria-pressed="true">Zmień hasło</a>
+                            <a href="{{ url('/profile/'.$user->id.'/editpassword') }}" class="btn btn-dark" role="button" aria-pressed="true">Zmień hasło</a>
                         </div>
 
                         <div class=" mr-4">

@@ -55,7 +55,7 @@
                                 </table>
                             </div>
                         </div>
-                    @if(count($purchaseInvoicesData) == '0')
+                    @if(count($purchaseInvoicesData) !== '0')
 
                         <div class="co h4 ml-lg-5 mt-lg-5">Zakupy</div>
 
