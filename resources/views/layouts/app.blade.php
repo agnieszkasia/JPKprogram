@@ -24,13 +24,32 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/navbar.js') }}" defer></script>
+    <script src="{{ asset('js/confirmation.js') }}" defer></script>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
 </head>
 <body>
 <div class="bg2"></div>
+    @yield('main_content')
+
+    <div id="wrapper">
+        <div id="page-content-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+
+                        @yield('content')
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
@@ -131,18 +150,6 @@
         <img style="height: 30px" src="{{asset('images/menu_icon.png')}}" alt="menuIcon" class="image">
     </a>
 
-    <div id="wrapper">
-        <div id="page-content-wrapper">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-
-                        @yield('content')
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </body>
 </html>

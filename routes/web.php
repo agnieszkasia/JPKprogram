@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth']], function (){
     Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('store_invoice');
     Route::get('/invoice/{id}', [InvoiceController::class, 'show']);
     Route::get('/invoice/{id}/pdf', [InvoiceController::class, 'generate_pdf']);
-    Route::get('/invoice/{id}/delete', [InvoiceController::class, 'destroy']);
+    Route::post('/invoice/{id}/delete', [InvoiceController::class, 'destroy'])->name('delete_invoices');
     Route::get('/invoice/{id}/edit', [InvoiceController::class, 'edit']);
     Route::post('/invoice/{id}/update', [InvoiceController::class, 'update']);
 
@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth']], function (){
     Route::get('/purchaseinvoice/create', [PurchaseInvoiceController::class, 'create'])->name('create_purchase_invoice');
     Route::post('/purchaseinvoice/store', [PurchaseInvoiceController::class, 'store'])->name('store_purchase_invoice');
     Route::get('/purchaseinvoice/{id}', [PurchaseInvoiceController::class, 'show']);
-    Route::get('/purchaseinvoice/{id}/delete', [PurchaseInvoiceController::class, 'destroy']);
+    Route::post('/purchaseinvoice/{id}/delete', [PurchaseInvoiceController::class, 'destroy']);
     Route::get('/purchaseinvoice/{id}/edit', [PurchaseInvoiceController::class, 'edit']);
     Route::post('/purchaseinvoice/{id}/update', [PurchaseInvoiceController::class, 'update']);
 
@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth']], function (){
     Route::post('/settlement/generate', [TaxSettlementController::class, 'generate'])->name('generate_tax_settlement');
     Route::post('/settlement/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
     Route::get('/settlement/{id}', [TaxSettlementController::class, 'show']);
-    Route::get('/settlement/{id}/delete', [TaxSettlementController::class, 'destroy']);
+    Route::post('/settlement/{id}/delete', [TaxSettlementController::class, 'destroy']);
     Route::get('/settlement/{id}/generateXML', [TaxSettlementController::class, 'generateXMLFile']);
 
     Route::get('/corrections/create', [TaxSettlementController::class, 'createCorrection'])->name('create_tax_correction');

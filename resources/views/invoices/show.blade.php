@@ -99,8 +99,8 @@
                                     <tr class="h5">
                                         <td colspan="2" ></td>
                                         <td>Suma</td>
-                                        <td>{{$invoice->vat}}</td>
                                         <td>{{$invoice->netto}}</td>
+                                        <td>{{$invoice->vat}}</td>
                                         <td>{{$invoice->brutto}}</td>
                                     </tr>
                                     </tbody>

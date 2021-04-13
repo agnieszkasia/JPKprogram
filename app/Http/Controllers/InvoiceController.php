@@ -15,6 +15,7 @@ class InvoiceController extends Controller{
         $user = Auth::user();
         $invoices = $user->invoices;
 
+
         return view('invoices.show_all', compact('invoices'));
     }
 
@@ -83,10 +84,11 @@ class InvoiceController extends Controller{
         $price['netto'] = 0;
         $price['brutto'] = 0;
         $prices = $request->input('price');
+        $quantities = $request->input('quantity');
         for ($i=0; $i<count($prices); $i++){
-            $price['vat'] = $price['vat'] + round($prices[$i]/1.23*0.23,2);
-            $price['netto'] = $price['netto'] + round($prices[$i]/1.23,2);
-            $price['brutto'] = $price['brutto'] + $prices[$i];
+            $price['vat'] = $price['vat'] + round($prices[$i]*$quantities[$i]/1.23*0.23,2);
+            $price['netto'] = $price['netto'] + round($prices[$i]*$quantities[$i]/1.23,2);
+            $price['brutto'] = $price['brutto'] + $prices[$i]*$quantities[$i];
         }
 
         return $price;

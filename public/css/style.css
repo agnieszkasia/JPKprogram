@@ -16,7 +16,6 @@
 }
 
 #sidebar-wrapper {
-    z-index: 1000;
     position: fixed;
     top: 0;
     left: 250px;
@@ -48,7 +47,6 @@
 
 
 .nav-button{
-    z-index: 800;
     position: fixed;
     top: 20px;
     left: 270px;
@@ -182,7 +180,6 @@ html, body {
     background-size: cover;
     position: sticky;
     height: 100%;
-    z-index: -1;
 }
 
 .bg2 {
@@ -195,7 +192,6 @@ html, body {
     height: 100%;
     width: 100%;
     backdrop-filter: blur(5px) ;
-    z-index: -1;
 }
 
 .bg-blur {
@@ -241,3 +237,4 @@ html, body {
 .btn-light:focus, .btn-light:hover{
     background-color: rgba(255,255,255,0.9);
 }
+
