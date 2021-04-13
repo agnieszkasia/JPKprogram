@@ -19,71 +19,61 @@
 <style type="text/css">
 
     body {
+        margin-left: -15px;
+        margin-right: -15px;
         font-family: DejaVu Sans, serif;
         font-size: 12px;
     }
 
     .text-left {
-        text-align: left !important;
+        text-align: left ;
     }
 
     .text-right {
-        text-align: right !important;
+        text-align: right;
     }
 
     .text-center {
-        text-align: center !important;
+        text-align: center;
     }
 
-    .h3, .h5, .h6 {
-        margin-bottom: 0.5rem;
+    .h3, .h5{
         line-height: 1.2;
-        font-weight: bold;
+        font-weight: normal;
+    }
+
+    .h2 {
+        font-size: 28px;
     }
 
     .h3 {
-        font-size: 20px;
+        font-size: 24px;
     }
 
     .h5 {
-        font-size: 14px;
-    }
+        font-size: 8px;
+        color: #737373;
+        font-weight: normal;
 
-    .h6 {
-        font-size: 10px;
     }
 
     .row {
         display: flex;
         flex-wrap: wrap;
-        margin-right: -15px;
-        margin-left: -15px;
     }
 
     .my-5 {
         margin-top: 3rem !important;
     }
 
-    .my-5 {
-        margin-bottom: 3rem !important;
-    }
-
-    .mt-2{
-        margin-top: 40px;
-    }
 
     .mt-5{
-        margin-top: 100px;
+        margin-top: 80px;
     }
 
-    .col-lg-12, .col-md-2,  .col-12 {
+    .col-lg-12,  .col-12 {
         position: relative;
         width: 100%;
-    }
-
-    .col-md-2 {
-        flex: 0 0 12%;
-        max-width: 12%;
     }
 
     .col-12 {
@@ -98,98 +88,144 @@
     }
     .table {
         width: 100%;
-        color: #212529;
-        border-collapse: collapse !important;
-    }
-
-    .border-bottom {
-        border-bottom: 1px solid #4a4a4a
+        color: #000000;
+        border-color: grey;
     }
 
     .border-top {
-        border-top: 1px solid #4a4a4a
+        border-top: 1px solid #c6c6c6;
+    }
+
+    thead.border-bottom {
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    tbody.border-bottom {
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .mb-3{
+        margin-bottom: 20px;
+    }
+
+    tr.spaceUnder-2>td {
+        padding-bottom: 2em;
+    }
+
+    tr.spaceUnder>td {
+        padding-bottom: 0.75em;
+    }
+
+    tr.spaceAbove>td {
+        padding-top: 0.75em;
     }
 
 </style>
-    <div class="col-lg-12 " >
-        <div class="mt-2 h3 text-center ">{{ __('Faktura nr: ') }} {{$invoice->invoice_number}}</div>
-        <div class="my-5 row">
-            <div class="col-12">
+<div class="col-lg-12 " >
+    <div class="my-5 row">
+        <div class="col-12">
 
-                <table class="table table-bordered mt-2" >
-                    <tbody class="text-left " style="vertical-align: baseline">
-                        <tr>
-                            <td>
-                                <div class="h5">
-                                    Dane nabywcy:
-                                </div>
-                                {{ $invoice->company}}<br>
-                                {{ $invoice->street_name }} {{ $invoice->house_number }} <br>
-                                {{ $invoice->city }} {{ $invoice->postal_code }} <br>
-                                NIP: {{ $invoice->nip }}
-                            </td>
+            <table class="table" style="margin-top: 20px">
+                <tbody class="text-left "  >
+                    <tr class="spaceUnder-2">
+                        <td class="h3"><b class="h2">{{ __('Faktura ') }}</b> {{$invoice->invoice_number}}</div></td>
+                        <td >
+                            <div class="h5">
+                                DATA WYSTAWIENIA
+                            </div>
+                            {{ $invoice->issue_date }}
+                        </td>
+                        <td >
+                            <div class="h5">
+                                DATA SPRZEDAŻY
+                            </div>
+                            {{ $invoice->due_date }}
+                        </td>
 
-                            <td >
-                                <div class="h5">
-                                    Dane sprzedawcy:
-                                </div>
-                                {{ $user->company}}<br>
-                                {{ $user->street_name }} {{ $user->house_number }}<br>
-                                {{ $user->city }} {{ $user->postal_code }}<br>
-                                NIP: {{ $user->nip }}
-                            </td>
-
-                            <td>
-                                <div class="h5">
-                                    Data wystawienia:
-                                </div>
-                                {{ $invoice->issue_date }}<br><br>
-                                <div class="h5">
-                                    Data sprzedaży:
-                                </div>
-                                    {{ $invoice->due_date }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class=" mt-5 table">
-                    <thead class="border-bottom">
-                        <tr class="text-right h5">
-                            <td class="col-md-2  text-left ">Nazwa produktu/usługi</td>
-                            <td class="col-md-2 ">Ilość</td>
-                            <td class="col-md-2 " >Cena jednostkowa</td>
-                            <td class="col-md-2 " >Netto</td>
-                            <td class="col-md-2 " >VAT</td>
-                            <td class="col-md-2 " >Brutto</td>
-                        </tr>
-                    </thead>
-
-                    <tbody class="text-right ">
-                    @for($i=0; $i < $productsNumber; $i++)
-                        <tr class="border-bottom">
-                            <td class="text-left">{{$product[$i][0]}}</td>
-                            <td>{{$product[$i][1]}}</td>
-                            <td>{{$product[$i][2]}}</td>
-                            <td>{{$product[$i][3]}}</td>
-                            <td>{{$product[$i][4]}}</td>
-                            <td>{{$product[$i][5]}}</td>
-                        </tr>
-                    @endfor
-
-                    <tr class="h5">
-                        <td class=" border-top"></td>
-                        <td class=" border-top"></td>
-                        <td class=" border-top">Suma</td>
-                        <td class=" border-top">{{$all_products_price[0]}}</td>
-                        <td class=" border-top">{{$all_products_price[1]}}</td>
-                        <td class=" border-top">{{$all_products_price[2]}}</td>
                     </tr>
-                    </tbody>
-                </table>
 
-            </div>
+                    <tr>
+                        <td style="width: 50%">
+                            <div class="h5">
+                                DANE NABYWCY
+                            </div>
+                            <b>{{ $invoice->company}}</b><br>
+                            {{ $invoice->street_name }} {{ $invoice->house_number }} <br>
+                            {{ $invoice->city }} {{ $invoice->postal_code }} <br>
+                        NIP: {{ $invoice->nip }}
+                        </td>
+
+                        <td colspan="2">
+                            <div class="h5">
+                                DANE SPRZEDAWCY
+                            </div>
+                            <b>{{ $user->company}}</b><br>
+                            {{ $user->street_name }} {{ $user->house_number }}<br>
+                            {{ $user->city }} {{ $user->postal_code }}<br>
+                        NIP: {{ $user->nip }}
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class=" mt-5 table mb-3">
+                <thead class="border-bottom">
+                    <tr class="text-right h5 spaceUnder">
+                        <td class="text-left ">NAZWA PRODUKTU/USŁUGI</td>
+                        <td>ILOŚĆ</td>
+                        <td >CENA JEDNOSTKOWA</td>
+                        <td >NETTO</td>
+                        <td >VAT 23%</td>
+                        <td >BRUTTO</td>
+                    </tr>
+                </thead>
+
+                <tbody class="text-right border-bottom">
+                @for($i=0; $i < $productsNumber; $i++)
+                    <tr class="spaceAbove">
+                        <td style="width: 42%" class="text-left">{{$product[$i][0]}}</td>
+                        <td style="width: 8%">{{$product[$i][1]}}</td>
+                        <td style="width: 17%">{{$product[$i][2]}}</td>
+                        <td style="width: 11%">{{$product[$i][3]}}</td>
+                        <td style="width: 11%">{{$product[$i][4]}}</td>
+                        <td style="width: 11%">{{$product[$i][5]}}</td>
+                    </tr>
+                @endfor
+                </tbody>
+            </table>
+            <table class="table text-right">
+                <tbody>
+                    <tr class="h5">
+                        <td colspan="2">NETTO</td>
+                        <td >VAT 23%</td>
+                        <td >BRUTTO</td>
+                    </tr>
+                    <tr class=" text-right">
+                        <td style="width: 67%;padding-right: 10px" >SUMA</td>
+                        <td style="width: 11%"><b>{{$all_products_price[0]}}</b></td>
+                        <td style="width: 11%"><b>{{$all_products_price[1]}}</b></td>
+                        <td style="width: 11%"><b>{{$all_products_price[2]}}</b></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        <table class="table text-center" style="bottom: 50px; left: -15px; position: fixed;">
+            <tbody>
+                <tr>
+                    <td class="border-top h5" style="width: 40%">Podpis osoby upoważnionej do odbioru</td>
+                    <td style="width: 20%"></td>
+                    <td class="border-top h5" style="width: 40%">Podpis osoby upoważnionej do wystawienia</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+
         </div>
     </div>
+</div>
 </body>
 </html>

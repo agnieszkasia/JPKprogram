@@ -81,6 +81,7 @@
                                             <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                 <a class="dropdown-item" href="{{ url('/invoice/'.$invoice->id) }}">Podgląd</a>
+                                                <a class="dropdown-item" href="{{url('/invoice/'.$invoice->id.'/pdf') }}">Generuj PDF</a>
                                                 <a class="dropdown-item" href="{{ url('/invoice/'.$invoice->id.'/edit') }}">Edytuj</a>
                                                 <a class="dropdown-item deletebtn" href="javascript:void(0)">Usuń</a>
                                             </div>
