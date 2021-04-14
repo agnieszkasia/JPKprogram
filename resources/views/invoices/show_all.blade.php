@@ -29,13 +29,30 @@
 @endsection
 
 @section('content')
+
+
     <div class="mt-5 h3 text-center ">FAKTURY</div>
 
-    <div class="container-fluid mt-3 d-flex justify-content-end">
+    <div class="container-fluid mt-3 mb-lg-5 d-flex justify-content-end">
         <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
     </div>
 
-    <div class="my-lg-5 bg-white">
+    @if(session()->has('message'))
+        <div class="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
+            <div class="mt-2">
+                <strong>UWAGA!</strong> Zmiany został zapisane. Faktura znajduje się w rozliczeniu miesięcznym. Rozliczenie zostało zaktualizowane automatycznie.
+            </div>
+            <div>
+                <a href="{{ url('/settlement/'.session()->get('message')) }}" class="btn btn btn-warning" role="button" aria-pressed="true">Przejdz do rozliczenia</a>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    @endif
+
+    <div class="mb-lg-5 bg-white">
         <div class="row mx-5">
             <table id="invoicesTable" class="table table-borderless table-responsive">
                 <thead>

@@ -13,25 +13,19 @@ class InvoiceController extends Controller{
 
     public function showALl(){
         $user = Auth::user();
-        $invoices = $user->invoices;
-
+        $invoices = $user->invoices()->orderBy('invoice_number', 'desc')->get();
 
         return view('invoices.show_all', compact('invoices'));
     }
 
     public function create(){
-
-        /* create invoice number automatically */
         $last_invoice = Auth::user()->invoices->last();
 
-        if ($last_invoice->invoice_number == null){
-            $invoice_number_temp = 1;
-        } else {
-            $invoice_number_temp = (int)$last_invoice->invoice_number;
-        }
+        if ($last_invoice->invoice_number == null) $invoice_number_temp = 1;
+        else $invoice_number_temp = (int)$last_invoice->invoice_number;
+
         $invoice_number = ($invoice_number_temp+1)."_".Carbon::now()->year;
 
-        /* get current date */
         $currentDate = Carbon::now()->toDateString();
 
         return view('invoices.create', compact('currentDate', 'invoice_number'));
@@ -57,7 +51,6 @@ class InvoiceController extends Controller{
             'vat' => $prices['vat'],
             'netto' => $prices['netto'],
             'brutto' => $prices['brutto'],
-
         ]);
 
         $user = Auth::user();
@@ -66,7 +59,7 @@ class InvoiceController extends Controller{
         return redirect(route('invoices'));
     }
 
-    function getProductsToString($request){
+    function getProductsToString($request): string{
         $name = $request->input('name');
         $quantity = $request->input('quantity');
         $price = $request->input('price');
@@ -79,12 +72,13 @@ class InvoiceController extends Controller{
         return $products;
     }
 
-    public function getInvoicePrice($request){
+    public function getInvoicePrice($request): array{
         $price['vat'] = 0;
         $price['netto'] = 0;
         $price['brutto'] = 0;
         $prices = $request->input('price');
         $quantities = $request->input('quantity');
+
         for ($i=0; $i<count($prices); $i++){
             $price['vat'] = $price['vat'] + round($prices[$i]*$quantities[$i]/1.23*0.23,2);
             $price['netto'] = $price['netto'] + round($prices[$i]*$quantities[$i]/1.23,2);
@@ -139,7 +133,7 @@ class InvoiceController extends Controller{
         $products = $this->getProductsToString($request);
         $prices = $this->getInvoicePrice($request);
 
-        Invoice::find($id)->update([
+        $invoice = Invoice::find($id)->update([
             'user_id' => Auth::user()->getAuthIdentifier(),
             'company' => $request->input('company'),
             'street_name' => $request->input('street_name'),
@@ -154,7 +148,37 @@ class InvoiceController extends Controller{
             'netto' => $prices['netto'],
             'brutto' => $prices['brutto'],
         ]);
-        return redirect(route('invoices'));
+
+        $invoiceDate = substr($request->input('issue_date'),0 ,-3);
+        $taxSettlement = $this->checkIfIsInTaxSettlement($invoiceDate);
+
+        $taxSettlementData =$this->getTaxSettlementId($invoiceDate);
+
+        if ($taxSettlement == true) return redirect(route('invoices'))->with('message', $taxSettlementData);
+        else return redirect(route('invoices'));
+    }
+
+    public function checkIfIsInTaxSettlement($date): bool{
+        $user = Auth::user();
+        $taxSettlements = $user->taxSettlements;
+        $taxSettlementsDates = (new TaxSettlementController)->getTaxSettlementDates($taxSettlements);
+
+        if (in_array($date, $taxSettlementsDates)) return true;
+        else return false;
+    }
+
+    public function getTaxSettlementId($date): int{
+        $user = Auth::user();
+        $taxSettlements = $user->taxSettlements;
+
+        $month = substr($date,5,2);
+        $year = substr($date,0,-3);
+        $id = 0;
+
+        foreach ($taxSettlements as $taxSettlement){
+            if ($taxSettlement->month == $month && $taxSettlement->year == $year) $id=$taxSettlement->id;
+        }
+        return $id;
     }
 
     public function destroy($id){

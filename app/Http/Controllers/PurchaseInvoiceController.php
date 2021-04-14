@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Auth;
 class PurchaseInvoiceController extends Controller{
     public function showALl(){
         $user = Auth::user();
-        $purchaseInvoices = $user->purchaseInvoices;
-//        $invoicesNumber = count($purchaseInvoices);
+        $purchaseInvoices = $user->purchaseInvoices()->orderBy('issue_date', 'desc')->get();
+
         return view('purchase_invoices/show_all', compact('purchaseInvoices'));
     }
 

@@ -14,7 +14,10 @@ class TaxSettlementController extends Controller{
 
     function showAllTaxSettlement(){
         $user = Auth::user();
-        $taxSettlements = $user->taxSettlements;
+        $taxSettlements = $user->taxSettlements()
+            ->orderBy('year', 'desc')
+            ->orderBy('month', 'desc')
+            ->get();
         $i = 0;
         foreach ($taxSettlements as $taxSettlement){
             $taxSettlements[$i]->vat = $taxSettlement->sale_vat - $taxSettlement->purchase_vat;
@@ -100,6 +103,7 @@ class TaxSettlementController extends Controller{
     public function generate(Request $request){
         $user = Auth::user();
         $period = $request->period;
+//        dd($period);
         $invoices = $user->invoices;
         $purchaseInvoices = $user->purchaseInvoices;
 
