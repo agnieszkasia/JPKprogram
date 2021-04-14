@@ -18,8 +18,8 @@
 #sidebar-wrapper {
     position: fixed;
     top: 0;
-    left: 250px;
-    width: 0;
+    left: 0;
+    width: 250px;
     height: 100%;
     margin-left: -250px;
     overflow-y: auto;
@@ -28,6 +28,14 @@
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all0.5s ease;
+}
+
+#sidebar-wrapper.toggled{
+    margin-left: 0;
+}
+
+#menu-toggle.toggled{
+    left: 270px;
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -49,7 +57,7 @@
 .nav-button{
     position: fixed;
     top: 20px;
-    left: 270px;
+    left: 20px;
 }
 
 @media (min-width: 768px) {
@@ -62,6 +70,7 @@
     }
 
     #sidebar-wrapper {
+        left: 250px;
         width: 250px;
     }
 
@@ -87,14 +96,16 @@
         left: 20px;
     }
 
-
+    .nav-button{
+        left: 270px;
+    }
 }
 
 /* end - side navbar wrapper */
 
 /* sidebar links*/
 .sidebar-nav {
-    position: absolute;
+    position: relative;
     top: 0;
     width: 250px;
     margin: 0;
