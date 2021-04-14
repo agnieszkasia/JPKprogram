@@ -25,6 +25,7 @@
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/navbar.js') }}" defer></script>
     <script src="{{ asset('js/confirmation.js') }}" defer></script>
+    <script src="{{ asset('js/script.js') }}" defer></script>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -42,8 +43,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 mt-3">
+                                <div class="card">
 
-                        @yield('content')
+                                    @yield('content')
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

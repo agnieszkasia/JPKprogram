@@ -1,12 +1,10 @@
 @extends('layouts.app')
 
 @section('main_content')
-    <!-- Delete Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0">
-{{--                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>--}}
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -29,72 +27,65 @@
 
         </div>
     </div>
-    <!-- End Delete Modal -->
 
 @endsection
 
 @section('content')
-<div class="row justify-content-center">
-    <div class="col-md-12">
-        <div class="card mt-3">
-            <div class="mt-5 h3 text-center ">{{ __('FAKTURY ZAKUPU') }}</div>
+    <div class="mt-5 h3 text-center ">FAKTURY ZAKUPU</div>
 
-            <div class="container-fluid mt-3 d-flex justify-content-end">
-                <a href="{{ route('create_purchase_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
-            </div>
+    <div class="container-fluid mt-3 d-flex justify-content-end">
+        <a href="{{ route('create_purchase_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
+    </div>
 
-            <div class="my-lg-5 bg-white">
-                <div class="row mx-5">
-                    <table id="purchaseInvoicesTable" class="table table-borderless table-responsive">
-                        <thead>
-                            <tr class="border-bottom h6">
-                                <th style="width: 30%" >Dane sprzedawcy</th>
-                                <th style="width: 20%">Numer faktury</th>
-                                <th style="width: 14%">Data wystawienia</th>
-                                <th style="width: 14%">Data sprzedaży</th>
-                                <th style="width: 6%">VAT</th>
-                                <th style="width: 6%">Netto</th>
-                                <th style="width: 6%">Brutto</th>
-                                <th style="width: 4%"></th>
-                            </tr>
-                        </thead>
+    <div class="my-lg-5 bg-white">
+        <div class="row mx-5">
+            <table id="purchaseInvoicesTable" class="table table-borderless table-responsive">
+                <thead>
+                    <tr class="border-bottom h6">
+                        <th style="width: 30%" >Dane sprzedawcy</th>
+                        <th style="width: 20%">Numer faktury</th>
+                        <th style="width: 14%">Data wystawienia</th>
+                        <th style="width: 14%">Data sprzedaży</th>
+                        <th style="width: 6%">VAT</th>
+                        <th style="width: 6%">Netto</th>
+                        <th style="width: 6%">Brutto</th>
+                        <th style="width: 4%"></th>
+                    </tr>
+                </thead>
 
-                        <tbody class="">
-                            @foreach($purchaseInvoices as $purchaseInvoice)
-                                <tr class="border-bottom ">
-                                    <td style="display:none;">{{$purchaseInvoice->id}}</td>
+                <tbody class="">
+                    @foreach($purchaseInvoices as $purchaseInvoice)
+                        <tr class="border-bottom ">
+                            <td style="display:none;">{{$purchaseInvoice->id}}</td>
 
-                                    <td class="flex-column">
-                                        <div>{{$purchaseInvoice->company}}</div>
-                                        <div>{{$purchaseInvoice->street_name}} {{$purchaseInvoice->house_number}}</div>
-                                        <div>{{$purchaseInvoice->postal_code}} {{$purchaseInvoice->city}}</div>
-                                        <div>NIP: {{$purchaseInvoice->nip}}</div>
-                                    </td>
-                                    <td class="">{{$purchaseInvoice->invoice_number}}</td>
-                                    <td>{{$purchaseInvoice->issue_date}}</td>
-                                    <td>{{$purchaseInvoice->due_date}}</td>
+                            <td class="flex-column">
+                                <div>{{$purchaseInvoice->company}}</div>
+                                <div>{{$purchaseInvoice->street_name}} {{$purchaseInvoice->house_number}}</div>
+                                <div>{{$purchaseInvoice->postal_code}} {{$purchaseInvoice->city}}</div>
+                                <div>NIP: {{$purchaseInvoice->nip}}</div>
+                            </td>
+                            <td class="">{{$purchaseInvoice->invoice_number}}</td>
+                            <td>{{$purchaseInvoice->issue_date}}</td>
+                            <td>{{$purchaseInvoice->due_date}}</td>
 
-                                    <td>{{$purchaseInvoice->vat}}</td>
-                                    <td>{{$purchaseInvoice->netto}}</td>
-                                    <td>{{$purchaseInvoice->brutto}}</td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoice->id) }}">Podgląd</a>
-                                                <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoice->id.'/edit') }}">Edytuj</a>
-                                                <a class="dropdown-item deletebtn" href="javascript:void(0)">Usuń</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                            <td>{{$purchaseInvoice->vat}}</td>
+                            <td>{{$purchaseInvoice->netto}}</td>
+                            <td>{{$purchaseInvoice->brutto}}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoice->id) }}">Podgląd</a>
+                                        <a class="dropdown-item" href="{{ url('/purchaseinvoice/'.$purchaseInvoice->id.'/edit') }}">Edytuj</a>
+                                        <a class="dropdown-item deletebtn" href="javascript:void(0)">Usuń</a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
 @endsection
