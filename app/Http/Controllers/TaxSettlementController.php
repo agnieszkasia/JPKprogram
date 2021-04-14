@@ -25,27 +25,66 @@ class TaxSettlementController extends Controller{
 
     public function create(){
         $user = Auth::user();
+        $taxSettlements = $user->taxSettlements;
         $invoices = $user->invoices;
-        $dates = array();
-        $years = array();
 
+        $dates = $this->getUniqueInvoiceDates($invoices);
+        $taxSettlementsDates = $this->getTaxSettlementDates($taxSettlements);
+
+
+        list($taxSettlementsDatesToCreate,$years) = $this->getTaxSettlementDatesToCreate($dates, $taxSettlementsDates);
+        $months = $this->getMonthsDependingOnYears($years, $taxSettlementsDatesToCreate);
+
+        return view('tax_settlements.create', compact('years', 'months'));
+    }
+
+    public function getUniqueInvoiceDates($invoices): array{
+        $dates = array();
         $i=0;
-        $j=0;
         foreach ($invoices as $invoice){
             $date = substr($invoice->issue_date, 0, -3);
-            $year = substr($date, 0, -3);
 
             if (!in_array($date, $dates)) {
                 $dates[$i] = $date;
-                if (!in_array($year, $years)) {
-                    $years[$j] = $year;
+                $i++;
+            }
+        }
+        return $dates;
+    }
+
+    public function getTaxSettlementDates($taxSettlements): array{
+        $taxSettlementDates = array();
+        $i = 0;
+        foreach ($taxSettlements as $taxSettlement){
+            $taxSettlementDates[$i] = $taxSettlement->year."-".$taxSettlement->month;
+            $i++;
+        }
+        return $taxSettlementDates;
+    }
+
+    public function getTaxSettlementDatesToCreate($dates, $taxSettlementsDates): array{
+        $taxSettlementsDatesToCreate = array();
+        $years = array();
+        $i = 0;
+        $j = 0;
+        foreach ($dates as $date){
+            if (!in_array($date,$taxSettlementsDates)){
+                $taxSettlementsDatesToCreate[$i] = $date;
+                if (!in_array(substr($date, 0, -3),$years)) {
+                    $years[$j] = substr($date, 0, -3);
                     $j++;
                 }
                 $i++;
             }
+
         }
         array_multisort($years);
 
+        return array($taxSettlementsDatesToCreate, $years);
+    }
+
+    public function getMonthsDependingOnYears($years, $dates): array{
+        $months = array();
         foreach ($years as $year) {
             $j=0;
             foreach ($dates as $date) {
@@ -55,7 +94,7 @@ class TaxSettlementController extends Controller{
                 }
             }
         }
-        return view('tax_settlements.create', compact('years', 'months'));
+        return $months;
     }
 
     public function generate(Request $request){

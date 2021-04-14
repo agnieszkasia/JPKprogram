@@ -81,7 +81,7 @@
                                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
                                                 <a class="dropdown-item" href="{{ url('/settlement/'.$taxSettlements[$i]->id) }}">Podgląd</a>
                                                 <a class="dropdown-item" href="{{ url('/settlement/'.$taxSettlements[$i]->id.'/generateXML') }}">Generuj XML</a>
-                                                <a class="dropdown-item deleteSettlement" href="javascript:void(0)">Usuń</a>
+                                                <a class="dropdown-item deletebtn" href="javascript:void(0)">Usuń</a>
                                             </div>
                                         </div>
                                     </td>
@@ -94,4 +94,5 @@
             </div>
         </div>
 </div>
+
 @endsection
