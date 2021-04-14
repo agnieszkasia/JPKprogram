@@ -50,6 +50,9 @@
         </div>
     </div>
 
+    <a href="#menu-toggle" class="btn btn-light nav-button" id="menu-toggle">
+        <img style="height: 30px" src="{{asset('images/menu_icon.png')}}" alt="menuIcon" class="image">
+    </a>
 
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
@@ -146,9 +149,7 @@
             </li>
         </ul>
     </div>
-    <a href="#menu-toggle" class="btn btn-light nav-button" id="menu-toggle">
-        <img style="height: 30px" src="{{asset('images/menu_icon.png')}}" alt="menuIcon" class="image">
-    </a>
+
 
 
 </body>
