@@ -126,8 +126,8 @@
 
                             @error('due_date')
                             <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
+                                <strong>{{ $message }}</strong>
+                            </span>
                             @enderror
                         </div>
                     </div>
@@ -148,9 +148,33 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><input type="text" name="name[ ]" class="form-control" autocomplete=""></td>
-                            <td><input type="text" name="quantity[ ]" class="form-control"></td>
-                            <td><input type="text" name="price[ ]" class="form-control"></td>
+                            <td>
+                                <input type="text" name="name[ ]" class="form-control @error('name[ ]') is-invalid @enderror" autocomplete="">
+
+                                @error('name[ ]')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </td>
+                            <td>
+                                <input type="text" name="quantity[ ]" class="form-control @error('quantity[ ]') is-invalid @enderror">
+
+                                @error('quantity[ ]')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </td>
+                            <td>
+                                <input type="text" name="price[ ]" class="form-control @error('price[ ]') is-invalid @enderror">
+
+                                @error('price[ ]')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </td>
                             <th><a href="javascript:void(0)" class="btn btn-danger deleteRow">Usuń</a> </th>
                         </tr>
                         </tbody>

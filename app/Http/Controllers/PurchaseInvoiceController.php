@@ -19,6 +19,9 @@ class PurchaseInvoiceController extends Controller{
     }
 
     public function store(Request $request){
+
+        $this->validator($request);
+
         $purchaseInvoice = PurchaseInvoice::create([
             'user_id' => Auth::user()->getAuthIdentifier(),
             'invoice_number' => $request->input('invoice_number'),
@@ -42,6 +45,23 @@ class PurchaseInvoiceController extends Controller{
         return redirect(route('purchase_invoices'));
     }
 
+    protected function validator($request){
+
+        return $request->validate([
+            'invoice_number' => ['required', 'string', 'max:255', 'min:1'],
+            'company' => ['required', 'string', 'max:255', 'min:2'],
+            'street_name' => ['required', 'string', 'min:3', 'max:255'],
+            'house_number' => ['required', 'string', 'max:255'],
+            'postal_code' => ['required','regex:/[0-9]{2}-[0-9]{3}/u', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'nip' => ['required', 'string', 'regex:/[0-9]{10}/u', 'size:10'],
+            'issue_date' => ['required'],
+            'due_date' => ['required'],
+            'vat' => ['required', 'numeric', 'regex:/^\d{1,8}\.\d{1,2}$/u', 'max:255'],
+            'netto' => ['required', 'numeric', 'regex:/^\d{1,8}\.\d{1,2}$/u', 'max:255'],
+            'brutto' => ['required', 'numeric', 'regex:/^\d{1,8}\.\d{1,2}$/u', 'max:255'],
+        ]);
+    }
 
     public function show($id){
         $user = Auth::user();
@@ -56,6 +76,8 @@ class PurchaseInvoiceController extends Controller{
     }
 
     public function update(Request $request, $id){
+
+        $this->validator($request);
 
         PurchaseInvoice::find($id)->update([
             'invoice_number' => $request->input('invoice_number'),

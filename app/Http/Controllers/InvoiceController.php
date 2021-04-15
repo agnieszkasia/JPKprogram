@@ -32,9 +32,18 @@ class InvoiceController extends Controller{
     }
 
     public function store(Request $request){
+        $user = $this->getAuthUser();
 
         $products = $this->getProductsToString($request);
         $prices = $this->getInvoicePrice($request);
+
+        $this->validator($request);
+
+//        $i=0;
+//        foreach ($request->name as $name){
+//            $this->productsValidator($request, $i);
+//            $i++;
+//        }
 
         $invoice = Invoice::create([
             'user_id' => Auth::user()->getAuthIdentifier(),
@@ -53,11 +62,34 @@ class InvoiceController extends Controller{
             'brutto' => $prices['brutto'],
         ]);
 
-        $user = Auth::user();
         $user->invoices->add($invoice);
 
         return redirect(route('invoices'));
     }
+
+    protected function validator($request){
+
+        return $request->validate([
+            'invoice_number' => ['required', 'string', 'max:255', 'min:1'],
+            'company' => ['required', 'string', 'max:255', 'min:2'],
+            'street_name' => ['required', 'string', 'min:3', 'max:255'],
+            'house_number' => ['required', 'string', 'max:255'],
+            'postal_code' => ['required','regex:/[0-9]{2}-[0-9]{3}/u', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'nip' => ['required', 'string', 'regex:/[0-9]{10}/u', 'size:10'],
+            'issue_date' => ['required'],
+            'due_date' => ['required'],
+        ]);
+    }
+
+    public function productsValidator($request, $i){
+        return $request->validate([
+            'name['.$i.']' => ['required', 'string', 'max:255', 'min:1'],
+            'quantity['.$i.']' => ['required', 'numeric', 'max:6'],
+            'price['.$i.']' => ['required', 'numeric', 'regex:/^\d{0,8}(\.\d{1,4})?$/u', 'max:255'],
+        ]);
+    }
+
 
     function getProductsToString($request): string{
         $name = $request->input('name');
@@ -132,6 +164,8 @@ class InvoiceController extends Controller{
     public function update(Request $request, $id){
         $products = $this->getProductsToString($request);
         $prices = $this->getInvoicePrice($request);
+
+        $this->validator($request);
 
         $invoice = Invoice::find($id)->update([
             'user_id' => Auth::user()->getAuthIdentifier(),
