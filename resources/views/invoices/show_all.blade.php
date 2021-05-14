@@ -37,6 +37,11 @@
         <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
     </div>
 
+    <form action="" method="post" class="d-flex">
+        <input name="start_date" type="date" class="form-control col-2" placeholder="data od">
+        <input name="end_date" type="date" class="form-control col-2" >
+    </form>
+
     @if(session()->has('message'))
         <div class="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
             <div class="mt-2">
