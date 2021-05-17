@@ -37,9 +37,11 @@
         <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
     </div>
 
-    <form action="" method="post" class="d-flex">
+    <form action="{{route('search_invoices')}}" method="post" class="d-flex">
+        @csrf
         <input name="start_date" type="date" class="form-control col-2" placeholder="data od">
         <input name="end_date" type="date" class="form-control col-2" >
+        <button type="submit" name="filter" class="btn btn-secondary">Wyszukaj</button>
     </form>
 
     @if(session()->has('message'))
