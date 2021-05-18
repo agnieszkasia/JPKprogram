@@ -7,15 +7,40 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use function PHPUnit\Framework\isEmpty;
 
 
 class InvoiceController extends Controller{
 
-    public function showALl(){
+    public function showALl(Request $request){
         $user = Auth::user();
         $invoices = $user->invoices()->orderBy('invoice_number', 'desc')->get();
 
-        return view('invoices.show_all', compact('invoices'));
+        $i = 0;
+        foreach ($invoices as $invoice){
+            $cities[$i] = $invoice->city;
+            $i++;
+        }
+
+        $cities = array_unique($cities);
+
+        if (($request['start_date'] || $request['end_date']) || $request['cities']){
+
+            if ($request['start_date'] == null){ $request['start_date'] = $user->invoices()->orderBy('issue_date')->first()->issue_date; }
+            if ($request['end_date'] == null){ $request['end_date'] = Carbon::now()->toDateString(); }
+
+            if (!$request['cities']){
+                $invoices = $user->invoices()
+                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
+                    ->orderBy('invoice_number', 'desc')->get();
+            } else {
+                $invoices = $user->invoices()
+                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
+                    ->where('city', $request['cities'])
+                    ->orderBy('invoice_number', 'desc')->get();
+            }
+        }
+        return view('invoices.show_all', compact('invoices', 'cities'));
     }
 
     public function create(){
@@ -251,13 +276,13 @@ class InvoiceController extends Controller{
     public function search(Request $request){
         $user = Auth::user();
 
-        if ($request->start_date == 'null'){
-            return $this->showALl();
-        }
-        $invoices = $user->invoices()->whereBetween('issue_date', [ $request['start_date'],$request['end_date']])
-                                    ->orderBy('invoice_number', 'desc')->get();
 
-        return view('invoices.show_all', compact('invoices'));
+
+            return redirect()->back();
+    }
+
+    public function sort(){
+
     }
 
 }

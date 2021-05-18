@@ -29,20 +29,56 @@
 @endsection
 
 @section('content')
+    <div class="my-5 h3 text-center ">FAKTURY</div>
 
-
-    <div class="mt-5 h3 text-center ">FAKTURY</div>
-
-    <div class="container-fluid mt-3 mb-lg-5 d-flex justify-content-end">
+    <div class="container-fluid mt-5 mb-lg-5 d-flex justify-content-end position-absolute">
         <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
     </div>
 
-    <form action="{{route('search_invoices')}}" method="post" class="d-flex m-auto ">
-        @csrf
-        <input name="start_date" type="date" class="form-control mx-2" placeholder="data od">
-        <input name="end_date" type="date" class="form-control mx-2" >
-        <button type="submit" name="filter" class="btn btn-dark">Wyszukaj</button>
-    </form>
+    <div class="d-flex justify-content-between row mx-5">
+        <form action="{{route('search_invoices')}}" method="post" class="d-flex">
+            @csrf
+
+            <select name="cities" id="cities" class="form-control mx-2">
+                <option value="">Miasto</option>
+
+                @foreach($cities as $city)
+                    <option value="{{$city}}">{{$city}}</option>
+                @endforeach
+            </select>
+
+{{--            <div class="form-group col-lg-5">--}}
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    <input type="text" name="start_date"  class="form-control datepicker-input" data-target="#datetimepicker1" />
+                    <span class="input-group-addon" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <i class="bi bi-calendar"></i>
+                  </span>
+                </div>
+{{--            </div>--}}
+
+            <button type="submit" name="filter" class="btn btn-dark">Wyszukaj</button>
+        </form>
+
+{{--        <form action="{{route('sort_invoices')}}" method="post" class="d-flex">--}}
+{{--            @csrf--}}
+
+{{--            <select name="sort" id="sort" class="form-control">--}}
+{{--                <option value="">Sortuj</option>--}}
+
+{{--                <option value="asc_issue_date">Data wystawienia od najnowszych</option>--}}
+{{--                <option value="desc_issue_date">Data wystawienia od najstarszych</option>--}}
+{{--                <option value="asc_due_date">Data sprzedaży od najnowszych</option>--}}
+{{--                <option value="desc_due_date">Data sprzedaży od najstarszych</option>--}}
+{{--                <option value="asc_number">Numer faktury od najnowszych</option>--}}
+{{--                <option value="desc_number">Numer faktury od najstarszych</option>--}}
+{{--                <option value="asc_data">Dane sprzedawcy A-Z</option>--}}
+{{--                <option value="desc_data">Dane sprzedawcy Z-A</option>--}}
+{{--            </select>--}}
+{{--            <button type="submit" name="filter" class="btn btn-dark">Wyszukaj</button>--}}
+{{--        </form>--}}
+
+    </div>
+
 
     @if(session()->has('message'))
         <div class="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
@@ -111,4 +147,8 @@
         </div>
     </div>
 
+
+
 @endsection
+
+
