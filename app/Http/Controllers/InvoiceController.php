@@ -249,11 +249,13 @@ class InvoiceController extends Controller{
     }
 
     public function search(Request $request){
-
         $user = Auth::user();
 
-        $invoices = $user->invoices()->where('issue_date', ">", $request->start_date)
-                                    ->where('issue_date', "<", $request->end_date)->orderBy('invoice_number', 'desc')->get();
+        if ($request->start_date == 'null'){
+            return $this->showALl();
+        }
+        $invoices = $user->invoices()->whereBetween('issue_date', [ $request['start_date'],$request['end_date']])
+                                    ->orderBy('invoice_number', 'desc')->get();
 
         return view('invoices.show_all', compact('invoices'));
     }

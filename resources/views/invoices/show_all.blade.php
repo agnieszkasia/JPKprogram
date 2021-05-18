@@ -37,11 +37,11 @@
         <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
     </div>
 
-    <form action="{{route('search_invoices')}}" method="post" class="d-flex">
+    <form action="{{route('search_invoices')}}" method="post" class="d-flex m-auto ">
         @csrf
-        <input name="start_date" type="date" class="form-control col-2" placeholder="data od">
-        <input name="end_date" type="date" class="form-control col-2" >
-        <button type="submit" name="filter" class="btn btn-secondary">Wyszukaj</button>
+        <input name="start_date" type="date" class="form-control mx-2" placeholder="data od">
+        <input name="end_date" type="date" class="form-control mx-2" >
+        <button type="submit" name="filter" class="btn btn-dark">Wyszukaj</button>
     </form>
 
     @if(session()->has('message'))
@@ -59,7 +59,7 @@
         </div>
     @endif
 
-    <div class="mb-lg-5 bg-white">
+    <div class="mb-lg-5 mt-lg-3 bg-white">
         <div class="row mx-5">
             <table id="invoicesTable" class="table table-borderless table-responsive">
                 <thead>
