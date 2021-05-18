@@ -13,10 +13,9 @@ return [
     |
     */
 
-    'throttled' => 'Please wait before retrying.',
-    'user' => 'Nie ma użytkownika z takim adresem email.',
-    'token' => 'Token zmiany hasła jest nieprawidłowy.',
-    'sent' => 'Link do zmiany hasła został wysłany!',
-    'reset' => 'Twoje hasło zostało zresetowane!',
-
+    'reset'     => 'Hasło zostało zresetowane!',
+    'sent'      => 'Przypomnienie hasła zostało wysłane!',
+    'throttled' => 'Proszę zaczekać zanim spróbujesz ponownie.',
+    'token'     => 'Token resetowania hasła jest nieprawidłowy.',
+    'user'      => 'Nie znaleziono użytkownika z takim adresem e-mail.',
 ];

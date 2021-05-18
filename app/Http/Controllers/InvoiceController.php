@@ -39,12 +39,6 @@ class InvoiceController extends Controller{
 
         $this->validator($request);
 
-//        $i=0;
-//        foreach ($request->name as $name){
-//            $this->productsValidator($request, $i);
-//            $i++;
-//        }
-
         $invoice = Invoice::create([
             'user_id' => Auth::user()->getAuthIdentifier(),
             'invoice_number' => $request->input('invoice_number'),
