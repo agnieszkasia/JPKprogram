@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">{{ __('Reset Password') }}</div>
+            <div class="col-lg-10 center">
+                <div class="card bg-text" style="margin-top: 10%; margin-bottom: 10%">
+                    <div class="mt-5 mb-3 h3 text-center ">{{ __('Reset Password') }}</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -31,9 +31,9 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mb-0">
+                            <div class="form-group row mb-5">
                                 <div class="col-md-6 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-dark">
                                         {{ __('Send Password Reset Link') }}
                                     </button>
                                 </div>
