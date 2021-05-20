@@ -14,33 +14,57 @@ class InvoiceController extends Controller{
 
     public function showALl(Request $request){
         $user = Auth::user();
-        $invoices = $user->invoices()->orderBy('invoice_number', 'desc')->get();
+        $invoices = $user->invoices();
 
         $i = 0;
-        foreach ($invoices as $invoice){
+        foreach ($invoices->get() as $invoice){
             $cities[$i] = $invoice->city;
             $i++;
         }
+        $selectedCity = $request['cities'];
+        $startDate = null;
+        $endDate = null;
 
         $cities = array_unique($cities);
 
         if (($request['start_date'] || $request['end_date']) || $request['cities']){
 
-            if ($request['start_date'] == null){ $request['start_date'] = $user->invoices()->orderBy('issue_date')->first()->issue_date; }
-            if ($request['end_date'] == null){ $request['end_date'] = Carbon::now()->toDateString(); }
+            if ($request['start_date'] == null){
+                $request['start_date'] = $user->invoices()->orderBy('issue_date')->first()->issue_date;
+            } else $startDate = $request['start_date'];
+            if ($request['end_date'] == null){
+                $request['end_date'] = Carbon::now()->toDateString();
+            } else $endDate = $request['end_date'];
 
             if (!$request['cities']){
                 $invoices = $user->invoices()
-                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
-                    ->orderBy('invoice_number', 'desc')->get();
+                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']]);
             } else {
                 $invoices = $user->invoices()
                     ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
-                    ->where('city', $request['cities'])
-                    ->orderBy('invoice_number', 'desc')->get();
+                    ->where('city', $request['cities']);
+//                $selectedCity = $request['cities'];
             }
         }
-        return view('invoices.show_all', compact('invoices', 'cities'));
+
+        if ($request['sort'] == 'asc_issue_date') { $invoices->orderBy('issue_date', 'asc');}
+        if ($request['sort'] == 'desc_issue_date') { $invoices->orderBy('issue_date', 'desc');}
+        if ($request['sort'] == 'asc_due_date') { $invoices->orderBy('due_date', 'asc');}
+        if ($request['sort'] == 'desc_due_date') { $invoices->orderBy('due_date', 'desc');}
+        if ($request['sort'] == 'asc_number') { $invoices->orderBy('invoice_number', 'asc');}
+        if ($request['sort'] == 'desc_number') { $invoices->orderBy('invoice_number', 'desc');}
+        if ($request['sort'] == 'asc_data') { $invoices->orderBy('company', 'asc');}
+        if ($request['sort'] == 'desc_data') { $invoices->orderBy('company', 'desc');}
+        if ($request['sort'] == "") { $invoices->orderBy('invoice_number', 'desc');}
+
+//        dd($invoices);
+
+
+        $invoices = $invoices->get();
+
+
+
+        return view('invoices.show_all', compact('invoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
     }
 
     public function create(){

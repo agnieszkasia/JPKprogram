@@ -43,38 +43,54 @@
                 <option value="">Miasto</option>
 
                 @foreach($cities as $city)
-                    <option value="{{$city}}">{{$city}}</option>
+
+                    <option value="{{$city}}" @if($selectedCity == $city) selected @endif>{{$city}}</option>
+
                 @endforeach
             </select>
 
-{{--            <div class="form-group col-lg-5">--}}
-                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <input type="text" name="start_date"  class="form-control datepicker-input" data-target="#datetimepicker1" />
-                    <span class="input-group-addon" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                        <i class="bi bi-calendar"></i>
-                  </span>
-                </div>
-{{--            </div>--}}
 
-            <button type="submit" name="filter" class="btn btn-dark">Wyszukaj</button>
+            <input id="start_date" name="start_date" placeholder="Data od" value="@if($startDate) {{  $startDate }}@endif" class="ml-2"/>
+            <input id="end_date" name="end_date" placeholder="Data do" value="@if($endDate) {{  $endDate }}@endif" class="ml-4"/>
+
+
+            <button type="submit" name="filter" class="btn btn-dark ml-4">Wyszukaj</button>
+
+            <select name="sort" id="sort" class="custom-select ">
+                <option value="">Sortuj</option>
+
+                <option value="asc_issue_date" >Data wystawienia od najnowszych</option>
+                <option value="desc_issue_date">Data wystawienia od najstarszych</option>
+                <option value="asc_due_date">Data sprzedaży od najnowszych</option>
+                <option value="desc_due_date">Data sprzedaży od najstarszych</option>
+                <option value="asc_number">Numer faktury od najnowszych</option>
+                <option value="desc_number">Numer faktury od najstarszych</option>
+                <option value="asc_data">Dane sprzedawcy A-Z</option>
+                <option value="desc_data">Dane sprzedawcy Z-A</option>
+            </select>
+
+
         </form>
 
+        <script>
+            $('#start_date').datepicker({
+                uiLibrary: 'bootstrap4',
+                format: 'yyyy-mm-dd',
+                weekStartDay: 1
+            });
+            $('#end_date').datepicker({
+                uiLibrary: 'bootstrap4',
+                format: 'yyyy-mm-dd',
+                weekStartDay: 1
+            });
+            $('#sort').on('change', function(e){
+                $(this).closest('form').submit();
+            });
+        </script>
+
 {{--        <form action="{{route('sort_invoices')}}" method="post" class="d-flex">--}}
-{{--            @csrf--}}
 
-{{--            <select name="sort" id="sort" class="form-control">--}}
-{{--                <option value="">Sortuj</option>--}}
 
-{{--                <option value="asc_issue_date">Data wystawienia od najnowszych</option>--}}
-{{--                <option value="desc_issue_date">Data wystawienia od najstarszych</option>--}}
-{{--                <option value="asc_due_date">Data sprzedaży od najnowszych</option>--}}
-{{--                <option value="desc_due_date">Data sprzedaży od najstarszych</option>--}}
-{{--                <option value="asc_number">Numer faktury od najnowszych</option>--}}
-{{--                <option value="desc_number">Numer faktury od najstarszych</option>--}}
-{{--                <option value="asc_data">Dane sprzedawcy A-Z</option>--}}
-{{--                <option value="desc_data">Dane sprzedawcy Z-A</option>--}}
-{{--            </select>--}}
-{{--            <button type="submit" name="filter" class="btn btn-dark">Wyszukaj</button>--}}
 {{--        </form>--}}
 
     </div>

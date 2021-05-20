@@ -12,16 +12,3 @@ $('thead').on('click', '.addRow', function (){
 $('tbody').on('click', '.deleteRow', function (){
     $(this).parent().parent().remove();
 })
-
-// $(function() {
-//     $('#datetimepicker').datepicker();
-// });
-//
-// $(function (){
-//     $('#datepicker').datepicker(
-//         // {
-//         // format: 'mm/dd/yyyy',
-//         // startDate: '-3d'
-//     // }
-//     );
-// })
