@@ -57,12 +57,7 @@ class InvoiceController extends Controller{
         if ($request['sort'] == 'desc_data') { $invoices->orderBy('company', 'desc');}
         if ($request['sort'] == "") { $invoices->orderBy('invoice_number', 'desc');}
 
-//        dd($invoices);
-
-
         $invoices = $invoices->get();
-
-
 
         return view('invoices.show_all', compact('invoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
     }

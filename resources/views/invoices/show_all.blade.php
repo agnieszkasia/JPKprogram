@@ -54,9 +54,9 @@
             <input id="end_date" name="end_date" placeholder="Data do" value="@if($endDate) {{  $endDate }}@endif" class="ml-4"/>
 
 
-            <button type="submit" name="filter" class="btn btn-dark ml-4">Wyszukaj</button>
+            <button type="submit" name="filter" class="btn btn-dark ml-4 mr-5">Wyszukaj</button>
 
-            <select name="sort" id="sort" class="custom-select ">
+            <select name="sort" id="sort" class="custom-select ml-5">
                 <option value="">Sortuj</option>
 
                 <option value="asc_issue_date" >Data wystawienia od najnowszych</option>
@@ -68,31 +68,7 @@
                 <option value="asc_data">Dane sprzedawcy A-Z</option>
                 <option value="desc_data">Dane sprzedawcy Z-A</option>
             </select>
-
-
         </form>
-
-        <script>
-            $('#start_date').datepicker({
-                uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd',
-                weekStartDay: 1
-            });
-            $('#end_date').datepicker({
-                uiLibrary: 'bootstrap4',
-                format: 'yyyy-mm-dd',
-                weekStartDay: 1
-            });
-            $('#sort').on('change', function(e){
-                $(this).closest('form').submit();
-            });
-        </script>
-
-{{--        <form action="{{route('sort_invoices')}}" method="post" class="d-flex">--}}
-
-
-{{--        </form>--}}
-
     </div>
 
 
@@ -167,4 +143,7 @@
 
 @endsection
 
+@section('script')
+    <script src="{{ asset('js/filter.js') }}" type="text/javascript" ></script>
 
+@endsection

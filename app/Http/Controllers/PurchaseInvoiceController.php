@@ -3,15 +3,59 @@
 namespace App\Http\Controllers;
 
 use App\Models\PurchaseInvoice;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class PurchaseInvoiceController extends Controller{
-    public function showALl(){
+    public function showALl(Request $request){
         $user = Auth::user();
-        $purchaseInvoices = $user->purchaseInvoices()->orderBy('issue_date', 'desc')->get();
+        $invoices = $user->purchaseInvoices();
 
-        return view('purchase_invoices/show_all', compact('purchaseInvoices'));
+        $i = 0;
+        foreach ($invoices->get() as $invoice){
+            $cities[$i] = $invoice->city;
+            $i++;
+        }
+        $selectedCity = $request['cities'];
+        $startDate = null;
+        $endDate = null;
+
+        $cities = array_unique($cities);
+
+        if (($request['start_date'] || $request['end_date']) || $request['cities']){
+
+            if ($request['start_date'] == null){
+                $request['start_date'] = $user->purchaseInvoices()->orderBy('issue_date')->first()->issue_date;
+            } else $startDate = $request['start_date'];
+            if ($request['end_date'] == null){
+                $request['end_date'] = Carbon::now()->toDateString();
+            } else $endDate = $request['end_date'];
+
+            if (!$request['cities']){
+                $invoices = $user->purchaseInvoices()
+                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']]);
+            } else {
+                $invoices = $user->purchaseInvoices()
+                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
+                    ->where('city', $request['cities']);
+//                $selectedCity = $request['cities'];
+            }
+        }
+
+        if ($request['sort'] == 'asc_issue_date') { $invoices->orderBy('issue_date', 'asc');}
+        if ($request['sort'] == 'desc_issue_date') { $invoices->orderBy('issue_date', 'desc');}
+        if ($request['sort'] == 'asc_due_date') { $invoices->orderBy('due_date', 'asc');}
+        if ($request['sort'] == 'desc_due_date') { $invoices->orderBy('due_date', 'desc');}
+        if ($request['sort'] == 'asc_number') { $invoices->orderBy('invoice_number', 'asc');}
+        if ($request['sort'] == 'desc_number') { $invoices->orderBy('invoice_number', 'desc');}
+        if ($request['sort'] == 'asc_data') { $invoices->orderBy('company', 'asc');}
+        if ($request['sort'] == 'desc_data') { $invoices->orderBy('company', 'desc');}
+        if ($request['sort'] == "") { $invoices->orderBy('invoice_number', 'desc');}
+
+        $purchaseInvoices = $invoices->get();
+
+        return view('purchase_invoices.show_all', compact('purchaseInvoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
     }
 
     public function create(){

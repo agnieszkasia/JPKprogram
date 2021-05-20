@@ -159,6 +159,7 @@
         </ul>
     </div>
 
+@yield('script')
 
 
 

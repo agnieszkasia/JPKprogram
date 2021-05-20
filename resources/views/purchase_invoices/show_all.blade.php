@@ -31,13 +31,64 @@
 @endsection
 
 @section('content')
-    <div class="mt-5 h3 text-center ">FAKTURY ZAKUPU</div>
+    <div class="my-5 h3 text-center ">FAKTURY ZAKUPU</div>
 
-    <div class="container-fluid mt-3 d-flex justify-content-end">
+    <div class="container-fluid mt-5 mb-lg-5 d-flex justify-content-end position-absolute">
         <a href="{{ route('create_purchase_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>
     </div>
 
-    <div class="my-lg-5 bg-white">
+    <div class="d-flex justify-content-between row mx-5">
+        <form action="{{route('search_purchase_invoices')}}" method="post" class="d-flex">
+            @csrf
+
+            <select name="cities" id="cities" class="form-control mx-2">
+                <option value="">Miasto</option>
+
+                @foreach($cities as $city)
+
+                    <option value="{{$city}}" @if($selectedCity == $city) selected @endif>{{$city}}</option>
+
+                @endforeach
+            </select>
+
+
+            <input id="start_date" name="start_date" placeholder="Data od" value="@if($startDate) {{  $startDate }}@endif" class="ml-2"/>
+            <input id="end_date" name="end_date" placeholder="Data do" value="@if($endDate) {{  $endDate }}@endif" class="ml-4"/>
+
+
+            <button type="submit" name="filter" class="btn btn-dark ml-4 mr-5">Wyszukaj</button>
+
+            <select name="sort" id="sort" class="custom-select ml-5">
+                <option value="">Sortuj</option>
+
+                <option value="asc_issue_date" >Data wystawienia od najnowszych</option>
+                <option value="desc_issue_date">Data wystawienia od najstarszych</option>
+                <option value="asc_due_date">Data sprzedaży od najnowszych</option>
+                <option value="desc_due_date">Data sprzedaży od najstarszych</option>
+                <option value="asc_number">Numer faktury od najnowszych</option>
+                <option value="desc_number">Numer faktury od najstarszych</option>
+                <option value="asc_data">Dane sprzedawcy A-Z</option>
+                <option value="desc_data">Dane sprzedawcy Z-A</option>
+            </select>
+        </form>
+    </div>
+
+    @if(session()->has('message'))
+        <div class="alert alert-warning alert-dismissible fade show d-flex justify-content-between" role="alert">
+            <div class="mt-2">
+                <strong>UWAGA!</strong> Zmiany został zapisane. Faktura znajduje się w rozliczeniu miesięcznym. Rozliczenie zostało zaktualizowane automatycznie.
+            </div>
+            <div>
+                <a href="{{ url('/settlement/'.session()->get('message')) }}" class="btn btn btn-warning" role="button" aria-pressed="true">Przejdz do rozliczenia</a>
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    @endif
+
+    <div class="mb-lg-5 mt-lg-3 bg-white">
         <div class="row mx-5">
             <table id="purchaseInvoicesTable" class="table table-borderless table-responsive">
                 <thead>
@@ -87,5 +138,10 @@
             </table>
         </div>
     </div>
+
+@endsection
+
+@section('script')
+    <script src="{{ asset('js/filter.js') }}" type="text/javascript" ></script>
 
 @endsection
