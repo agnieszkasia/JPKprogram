@@ -7,7 +7,6 @@ use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use function PHPUnit\Framework\isEmpty;
 
 
 class InvoiceController extends Controller{
@@ -22,31 +21,47 @@ class InvoiceController extends Controller{
             $i++;
         }
         $selectedCity = $request['cities'];
-        $startDate = null;
-        $endDate = null;
+
 
         $cities = array_unique($cities);
 
+//        dd($invoices->get());
+        list($startDate, $endDate, $request) = $this->setStartAndEndDate($invoices, $request);
+        $this->filterInvoices($invoices,$request);
+        $this->sortInvoices($invoices, $request);
+
+        $invoices = $invoices->get();
+
+        return view('invoices.show_all', compact('invoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
+    }
+
+    public function setStartAndEndDate($invoices, $request){
+        $startDate = null;
+        $endDate = null;
+        if ($request['start_date'] == null){
+            $request['start_date'] = Auth::user()->invoices()->orderBy('issue_date')->first()->issue_date;
+        } else $startDate = $request['start_date'];
+        if ($request['end_date'] == null){
+            $request['end_date'] = Carbon::now()->toDateString();
+        } else $endDate = $request['end_date'];
+
+        return array($startDate, $endDate, $request);
+    }
+
+    public function filterInvoices($invoices, $request){
         if (($request['start_date'] || $request['end_date']) || $request['cities']){
-
-            if ($request['start_date'] == null){
-                $request['start_date'] = $user->invoices()->orderBy('issue_date')->first()->issue_date;
-            } else $startDate = $request['start_date'];
-            if ($request['end_date'] == null){
-                $request['end_date'] = Carbon::now()->toDateString();
-            } else $endDate = $request['end_date'];
-
             if (!$request['cities']){
-                $invoices = $user->invoices()
-                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']]);
+                $invoices->whereBetween('issue_date', [$request['start_date'], $request['end_date']]);
             } else {
-                $invoices = $user->invoices()
-                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
+                $invoices->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
                     ->where('city', $request['cities']);
 //                $selectedCity = $request['cities'];
             }
         }
+        return $invoices;
+    }
 
+    public function sortInvoices($invoices, $request){
         if ($request['sort'] == 'asc_issue_date') { $invoices->orderBy('issue_date', 'asc');}
         if ($request['sort'] == 'desc_issue_date') { $invoices->orderBy('issue_date', 'desc');}
         if ($request['sort'] == 'asc_due_date') { $invoices->orderBy('due_date', 'asc');}
@@ -56,10 +71,7 @@ class InvoiceController extends Controller{
         if ($request['sort'] == 'asc_data') { $invoices->orderBy('company', 'asc');}
         if ($request['sort'] == 'desc_data') { $invoices->orderBy('company', 'desc');}
         if ($request['sort'] == "") { $invoices->orderBy('invoice_number', 'desc');}
-
-        $invoices = $invoices->get();
-
-        return view('invoices.show_all', compact('invoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
+        return $invoices;
     }
 
     public function create(){
@@ -291,17 +303,4 @@ class InvoiceController extends Controller{
 
 
     }
-
-    public function search(Request $request){
-        $user = Auth::user();
-
-
-
-            return redirect()->back();
-    }
-
-    public function sort(){
-
-    }
-
 }
