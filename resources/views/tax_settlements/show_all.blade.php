@@ -34,21 +34,37 @@
 
 @section('content')
 
-    <div class="mt-5 h3 text-center ">ROZLICZENIA</div>
-    <div class="d-flex container-fluid justify-content-end">
-        <div class="mt-3 d-flex mr-3">
+    <div class="my-5 h3 text-center ">ROZLICZENIA</div>
+    <div class="container-fluid mt-5 mb-lg-5 d-flex justify-content-end position-absolute">
+        <div class="d-flex mr-3">
             <a href="{{ route('create_tax_settlement') }}" class="btn btn-dark" role="button" aria-pressed="true">Utwórz rozliczenie</a>
         </div>
 
         @if($taxSettlements != null)
-            <div class="mt-3 d-flex ">
                 <a href="{{ route('create_tax_correction') }}" class="btn btn-dark" role="button" aria-pressed="true">Utwórz korekte</a>
-            </div>
         @endif
-
     </div>
 
-    <div class="my-lg-5 bg-white">
+    <div class="d-flex justify-content-end row mx-5">
+        <form action="{{route('search_tax_settlements')}}" method="post" class="d-flex">
+            @csrf
+
+            {{--                <input id="start_date" name="start_date" placeholder="Data od" value="@if($startDate) {{  $startDate }}@endif" class="ml-2"/>--}}
+            {{--                <input id="end_date" name="end_date" placeholder="Data do" value="@if($endDate) {{  $endDate }}@endif" class="ml-4"/>--}}
+
+
+            {{--                <button type="submit" name="filter" class="btn btn-dark ml-4 mr-5">Wyszukaj</button>--}}
+
+            <select name="sort" id="sort" class="custom-select ml-5">
+                <option value="">Sortuj</option>
+
+                <option value="desc_issue_date" >Od najnowszych</option>
+                <option value="asc_issue_date">Od najstarszych</option>
+            </select>
+        </form>
+    </div>
+
+    <div class="mb-lg-5 mt-lg-3 bg-white">
         <div class="row mx-5">
             <table id="settlementTable" class="table table-borderless table-responsive">
                 <thead>
@@ -88,5 +104,10 @@
             </table>
         </div>
     </div>
+
+@endsection
+
+@section('script')
+    <script src="{{ asset('js/filter.js') }}" type="text/javascript" ></script>
 
 @endsection

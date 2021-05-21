@@ -12,18 +12,30 @@ use Illuminate\Support\Facades\Auth;
 
 class TaxSettlementController extends Controller{
 
-    function showAllTaxSettlement(){
+    function showAllTaxSettlement(Request $request){
         $user = Auth::user();
-        $taxSettlements = $user->taxSettlements()
-            ->orderBy('year', 'desc')
-            ->orderBy('month', 'desc')
-            ->get();
+        $taxSettlements = $user->taxSettlements();
+//            ->orderBy('year', 'desc')
+//            ->orderBy('month', 'desc');
+//            ->get();
+
+        $this->sort($taxSettlements, $request);
+        $taxSettlements = $taxSettlements->get();
+
         $i = 0;
         foreach ($taxSettlements as $taxSettlement){
             $taxSettlements[$i]->vat = $taxSettlement->sale_vat - $taxSettlement->purchase_vat;
             $i++;
         }
         return view('tax_settlements.show_all', compact('taxSettlements'));
+    }
+
+    public function sort($taxSettlements, $request){
+        if ($request['sort'] == 'asc_issue_date') { $taxSettlements->orderBy('year', 'asc')->orderBy('month', 'asc');}
+        if ($request['sort'] == 'desc_issue_date') { $taxSettlements->orderBy('year', 'desc')->orderBy('month', 'desc');}
+//        if ($request['sort'] == '') { $taxSettlements->orderBy('year', 'desc')->orderBy('month', 'desc');}
+
+        return $taxSettlements;
     }
 
     public function create(){

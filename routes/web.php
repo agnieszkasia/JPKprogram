@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth']], function (){
 
     /* tax settlements routes */
     Route::get('/settlements', [TaxSettlementController::class, 'showAllTaxSettlement'])->name('show_tax_settlements');
+    Route::post('/settlements', [TaxSettlementController::class, 'showAllTaxSettlement'])->name('search_tax_settlements');
     Route::get('/settlement/create', [TaxSettlementController::class, 'create'])->name('create_tax_settlement');
     Route::post('/settlement/generate', [TaxSettlementController::class, 'generate'])->name('generate_tax_settlement');
     Route::post('/settlement/store', [TaxSettlementController::class, 'store'])->name('store_tax_settlement');
