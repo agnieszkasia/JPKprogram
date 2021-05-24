@@ -15,9 +15,6 @@ class TaxSettlementController extends Controller{
     function showAllTaxSettlement(Request $request){
         $user = Auth::user();
         $taxSettlements = $user->taxSettlements();
-//            ->orderBy('year', 'desc')
-//            ->orderBy('month', 'desc');
-//            ->get();
 
         $this->sort($taxSettlements, $request);
         $taxSettlements = $taxSettlements->get();

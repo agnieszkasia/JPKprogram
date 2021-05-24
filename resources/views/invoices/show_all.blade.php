@@ -59,14 +59,12 @@
             <select name="sort" id="sort" class="custom-select ml-5">
                 <option value="">Sortuj</option>
 
-                <option value="desc_issue_date" >Data wystawienia od najnowszych</option>
-                <option value="asc_issue_date">Data wystawienia od najstarszych</option>
-                <option value="desc_due_date">Data sprzedaży od najnowszych</option>
-                <option value="asc_due_date">Data sprzedaży od najstarszych</option>
-                <option value="desc_number">Numer faktury od najnowszych</option>
-                <option value="asc_number">Numer faktury od najstarszych</option>
-                <option value="asc_data">Dane sprzedawcy A-Z</option>
-                <option value="desc_data">Dane sprzedawcy Z-A</option>
+                @foreach($sortingOptions as $option)
+
+                    <option value="{{$option['value']}}" @if($selectedOption == $option['value']) selected @endif>{{$option['name']}}</option>
+
+                @endforeach
+
             </select>
         </form>
     </div>

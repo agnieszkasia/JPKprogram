@@ -18,44 +18,36 @@ class PurchaseInvoiceController extends Controller{
             $i++;
         }
         $selectedCity = $request['cities'];
-        $startDate = null;
-        $endDate = null;
+
+        $sortingOptions = (new InvoiceController)->getSortingOption();
+
+        $selectedOption = $request['sort'];
 
         $cities = array_unique($cities);
 
-        if (($request['start_date'] || $request['end_date']) || $request['cities']){
+        list($startDate, $endDate, $request) = $this->setStartAndEndDate($invoices, $request);
+        (new InvoiceController)->filterInvoices($invoices,$request);
+        (new InvoiceController)->sortInvoices($invoices, $request);
 
-            if ($request['start_date'] == null){
-                $request['start_date'] = $user->purchaseInvoices()->orderBy('issue_date')->first()->issue_date;
-            } else $startDate = $request['start_date'];
-            if ($request['end_date'] == null){
-                $request['end_date'] = Carbon::now()->toDateString();
-            } else $endDate = $request['end_date'];
-
-            if (!$request['cities']){
-                $invoices = $user->purchaseInvoices()
-                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']]);
-            } else {
-                $invoices = $user->purchaseInvoices()
-                    ->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
-                    ->where('city', $request['cities']);
-//                $selectedCity = $request['cities'];
-            }
-        }
-
-        if ($request['sort'] == 'asc_issue_date') { $invoices->orderBy('issue_date', 'asc');}
-        if ($request['sort'] == 'desc_issue_date') { $invoices->orderBy('issue_date', 'desc');}
-        if ($request['sort'] == 'asc_due_date') { $invoices->orderBy('due_date', 'asc');}
-        if ($request['sort'] == 'desc_due_date') { $invoices->orderBy('due_date', 'desc');}
-        if ($request['sort'] == 'asc_number') { $invoices->orderBy('invoice_number', 'asc');}
-        if ($request['sort'] == 'desc_number') { $invoices->orderBy('invoice_number', 'desc');}
-        if ($request['sort'] == 'asc_data') { $invoices->orderBy('company', 'asc');}
-        if ($request['sort'] == 'desc_data') { $invoices->orderBy('company', 'desc');}
-        if ($request['sort'] == "") { $invoices->orderBy('invoice_number', 'desc');}
 
         $purchaseInvoices = $invoices->get();
 
-        return view('purchase_invoices.show_all', compact('purchaseInvoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
+        return view('purchase_invoices.show_all', compact('purchaseInvoices',
+            'cities', 'startDate', 'endDate', 'selectedCity',
+            'sortingOptions', 'selectedOption'));
+    }
+
+    public function setStartAndEndDate($invoices, $request): array{
+        $startDate = null;
+        $endDate = null;
+        if ($request['start_date'] == null){
+            $request['start_date'] = Auth::user()->purchaseInvoices()->orderBy('issue_date')->first()->issue_date;
+        } else $startDate = $request['start_date'];
+        if ($request['end_date'] == null){
+            $request['end_date'] = Carbon::now()->toDateString();
+        } else $endDate = $request['end_date'];
+
+        return array($startDate, $endDate, $request);
     }
 
     public function create(){
@@ -84,7 +76,7 @@ class PurchaseInvoiceController extends Controller{
         ]);
 
         $user = Auth::user();
-        $user->purchaseInvoices->add($purchaseInvoice);
+        $user->purchaseInvoices()->add($purchaseInvoice);
 
         return redirect(route('purchase_invoices'));
     }

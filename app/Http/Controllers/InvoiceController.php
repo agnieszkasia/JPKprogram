@@ -14,6 +14,7 @@ class InvoiceController extends Controller{
     public function showALl(Request $request){
         $user = Auth::user();
         $invoices = $user->invoices();
+        $cities = null;
 
         $i = 0;
         foreach ($invoices->get() as $invoice){
@@ -22,20 +23,51 @@ class InvoiceController extends Controller{
         }
         $selectedCity = $request['cities'];
 
+        $sortingOptions = $this->getSortingOption();
+
+        $selectedOption = $request['sort'];
+
 
         $cities = array_unique($cities);
 
-//        dd($invoices->get());
         list($startDate, $endDate, $request) = $this->setStartAndEndDate($invoices, $request);
         $this->filterInvoices($invoices,$request);
         $this->sortInvoices($invoices, $request);
 
         $invoices = $invoices->get();
 
-        return view('invoices.show_all', compact('invoices', 'cities', 'startDate', 'endDate', 'selectedCity'));
+//        dd($sortingOptions);
+
+        return view('invoices.show_all', compact('invoices',
+            'cities', 'startDate', 'endDate', 'selectedCity',
+            'sortingOptions', 'selectedOption'));
     }
 
-    public function setStartAndEndDate($invoices, $request){
+    public function getSortingOption(): array{
+        $sortingOption = array();
+
+        $sortingOption[0]['value'] = 'desc_issue_date';
+        $sortingOption[1]['value'] = 'asc_issue_date';
+        $sortingOption[2]['value'] = 'desc_due_date';
+        $sortingOption[3]['value'] = 'asc_due_date';
+        $sortingOption[4]['value'] = 'desc_number';
+        $sortingOption[5]['value'] = 'asc_number';
+        $sortingOption[6]['value'] = 'asc_data';
+        $sortingOption[7]['value'] = 'desc_data';
+
+        $sortingOption[0]['name'] = 'Data wystawienia od najnowszych';
+        $sortingOption[1]['name'] = 'Data wystawienia od najstarszych';
+        $sortingOption[2]['name'] = 'Data sprzedaży od najnowszych';
+        $sortingOption[3]['name'] = 'Data sprzedaży od najstarszych';
+        $sortingOption[4]['name'] = 'Numer faktury od najnowszych';
+        $sortingOption[5]['name'] = 'Numer faktury od najstarszych';
+        $sortingOption[6]['name'] = 'Dane sprzedawcy A-Z';
+        $sortingOption[7]['name'] = 'Dane sprzedawcy Z-A';
+
+        return $sortingOption;
+    }
+
+    public function setStartAndEndDate($invoices, $request): array{
         $startDate = null;
         $endDate = null;
         if ($request['start_date'] == null){
@@ -55,7 +87,6 @@ class InvoiceController extends Controller{
             } else {
                 $invoices->whereBetween('issue_date', [$request['start_date'], $request['end_date']])
                     ->where('city', $request['cities']);
-//                $selectedCity = $request['cities'];
             }
         }
         return $invoices;
