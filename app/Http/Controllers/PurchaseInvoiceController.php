@@ -30,9 +30,9 @@ class PurchaseInvoiceController extends Controller{
         (new InvoiceController)->sortInvoices($invoices, $request);
 
 
-        $purchaseInvoices = $invoices->get();
+        $invoices = $invoices->get();
 
-        return view('purchase_invoices.show_all', compact('purchaseInvoices',
+        return view('purchase_invoices.show_all', compact('invoices',
             'cities', 'startDate', 'endDate', 'selectedCity',
             'sortingOptions', 'selectedOption'));
     }
