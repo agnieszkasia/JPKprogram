@@ -26,7 +26,9 @@ To run this project:
 * Change user password
 * Adding, viewing, editing, deleting sales invoices
 * Adding, viewing, editing, deleting purchase invoices
+* Filtering and sorting sales and purchase invoices
 * Generating sales invoices as PDF file
 * Creating a monthly tax settlement based on user invoices
 * Viewing, deleting monthly tax settlement
+* Sorting tax settlements
 * Genereting a monthly tax settlement as XML file
