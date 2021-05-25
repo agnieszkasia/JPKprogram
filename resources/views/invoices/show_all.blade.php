@@ -29,7 +29,7 @@
 @endsection
 
 @section('content')
-    <div class="my-5 h3 text-center ">FAKTURY</div>
+    <div class="my-5 h3 text-center ">FAKTURY ZAKUPU</div>
 
     <div class="container-fluid mt-5 mb-lg-5 d-flex justify-content-end position-absolute">
         <a href="{{ route('create_invoice') }}" class="btn btn-dark" role="button" aria-pressed="true">Dodaj fakture</a>

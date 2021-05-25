@@ -14,33 +14,40 @@ class InvoiceController extends Controller{
     public function showALl(Request $request){
         $user = Auth::user();
         $invoices = $user->invoices();
-        $cities = null;
 
-        $i = 0;
-        foreach ($invoices->get() as $invoice){
-            $cities[$i] = $invoice->city;
-            $i++;
-        }
+        $cities = $this->getCitiesNames($invoices);
+
         $selectedCity = $request['cities'];
 
         $sortingOptions = $this->getSortingOption();
 
         $selectedOption = $request['sort'];
 
+        list($startDate, $endDate, $request) = $this->setStartAndEndDate($request);
 
-        $cities = array_unique($cities);
-
-        list($startDate, $endDate, $request) = $this->setStartAndEndDate($invoices, $request);
         $this->filterInvoices($invoices,$request);
+
         $this->sortInvoices($invoices, $request);
 
         $invoices = $invoices->get();
 
-//        dd($sortingOptions);
 
         return view('invoices.show_all', compact('invoices',
             'cities', 'startDate', 'endDate', 'selectedCity',
             'sortingOptions', 'selectedOption'));
+    }
+
+    public function getCitiesNames($invoices): array{
+        $i = 0;
+        $cities = array();
+        foreach ($invoices->get() as $invoice){
+            $cities[$i] = $invoice->city;
+            $i++;
+        }
+
+        $cities = array_unique($cities);
+
+        return $cities;
     }
 
     public function getSortingOption(): array{
@@ -67,7 +74,7 @@ class InvoiceController extends Controller{
         return $sortingOption;
     }
 
-    public function setStartAndEndDate($invoices, $request): array{
+    public function setStartAndEndDate($request): array{
         $startDate = null;
         $endDate = null;
         if ($request['start_date'] == null){
@@ -248,6 +255,12 @@ class InvoiceController extends Controller{
 
         $this->validator($request);
 
+        $invoiceDate = substr($request->input('issue_date'),0 ,-3);
+
+        $taxSettlement = $this->checkIfIsInTaxSettlement($invoiceDate);
+
+
+
         $invoice = Invoice::find($id)->update([
             'user_id' => Auth::user()->getAuthIdentifier(),
             'company' => $request->input('company'),
@@ -264,13 +277,34 @@ class InvoiceController extends Controller{
             'brutto' => $prices['brutto'],
         ]);
 
-        $invoiceDate = substr($request->input('issue_date'),0 ,-3);
-        $taxSettlement = $this->checkIfIsInTaxSettlement($invoiceDate);
+        if ($taxSettlement == true){
+            $taxSettlementData = $this->getTaxSettlementId($invoiceDate);
 
-        $taxSettlementData =$this->getTaxSettlementId($invoiceDate);
+            $this->updateTaxSettlement($id, $invoiceDate);
 
-        if ($taxSettlement == true) return redirect(route('invoices'))->with('message', $taxSettlementData);
-        else return redirect(route('invoices'));
+//            dd($oldInvoiceIssueDate);
+//            if (Invoice::find($id))
+            return redirect(route('invoices'))->with('message', $taxSettlementData);
+        }
+
+        return redirect(route('invoices'));
+    }
+
+    public function updateTaxSettlement($id, $invoiceDate){
+        $oldDate = $this->getOldIssueDate($id);
+        if($invoiceDate !== $oldDate){
+            dd('rr');
+            return null;
+        }
+        else return null;
+
+    }
+
+    public function getOldIssueDate($id){
+        $oldIssueDate = Invoice::find($id)->issue_date;
+        $oldIssueDate = substr($oldIssueDate,0 ,-3);
+
+        return $oldIssueDate;
     }
 
     public function checkIfIsInTaxSettlement($date): bool{
