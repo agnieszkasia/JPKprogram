@@ -259,7 +259,13 @@ class InvoiceController extends Controller{
 
         $taxSettlement = $this->checkIfIsInTaxSettlement($invoiceDate);
 
+        if ($taxSettlement == true){
+            $taxSettlementData = $this->getTaxSettlementId($invoiceDate);
 
+            $this->updateTaxSettlement($id, $invoiceDate);
+
+//            return redirect(route('invoices'))->with('message', $taxSettlementData);
+        }
 
         $invoice = Invoice::find($id)->update([
             'user_id' => Auth::user()->getAuthIdentifier(),
@@ -277,15 +283,7 @@ class InvoiceController extends Controller{
             'brutto' => $prices['brutto'],
         ]);
 
-        if ($taxSettlement == true){
-            $taxSettlementData = $this->getTaxSettlementId($invoiceDate);
 
-            $this->updateTaxSettlement($id, $invoiceDate);
-
-//            dd($oldInvoiceIssueDate);
-//            if (Invoice::find($id))
-            return redirect(route('invoices'))->with('message', $taxSettlementData);
-        }
 
         return redirect(route('invoices'));
     }
@@ -294,6 +292,7 @@ class InvoiceController extends Controller{
         $oldDate = $this->getOldIssueDate($id);
         if($invoiceDate !== $oldDate){
             dd('rr');
+            //update tax settlement
             return null;
         }
         else return null;

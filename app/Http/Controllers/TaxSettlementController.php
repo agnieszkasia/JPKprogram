@@ -112,7 +112,6 @@ class TaxSettlementController extends Controller{
     public function generate(Request $request){
         $user = Auth::user();
         $period = $request->period;
-//        dd($period);
         $invoices = $user->invoices;
         $purchaseInvoices = $user->purchaseInvoices;
 
