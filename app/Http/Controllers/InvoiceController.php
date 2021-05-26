@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\TaxSettlement;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
 use Illuminate\Http\Request;
@@ -264,10 +265,9 @@ class InvoiceController extends Controller{
 
             $this->updateTaxSettlement($id, $invoiceDate);
 
-//            return redirect(route('invoices'))->with('message', $taxSettlementData);
         }
 
-        $invoice = Invoice::find($id)->update([
+        Invoice::find($id)->update([
             'user_id' => Auth::user()->getAuthIdentifier(),
             'company' => $request->input('company'),
             'street_name' => $request->input('street_name'),
@@ -283,7 +283,9 @@ class InvoiceController extends Controller{
             'brutto' => $prices['brutto'],
         ]);
 
-
+        if(isset($taxSettlementData)){
+            return redirect(route('invoices'))->with('message', $taxSettlementData);
+        }
 
         return redirect(route('invoices'));
     }
@@ -291,8 +293,29 @@ class InvoiceController extends Controller{
     public function updateTaxSettlement($id, $invoiceDate){
         $oldDate = $this->getOldIssueDate($id);
         if($invoiceDate !== $oldDate){
-            dd('rr');
-            //update tax settlement
+            $taxSettlement = TaxSettlement::where('sales_invoice_ids','like', '%'.$id.'%')->first();
+            $invoicesIds = explode(';',$taxSettlement->sales_invoice_ids);
+            $invoicesIds = array_diff($invoicesIds, [$id]);
+            $invoicesIds = implode(';',$invoicesIds);
+
+            $taxSettlement->update([
+                'sales_invoice_ids' => $invoicesIds
+            ]);
+
+            $invoiceYear = substr($invoiceDate, 0, -3);
+            $invoiceMonth = substr($invoiceDate, 5);
+            $taxSettlement = TaxSettlement::where('year','like', $invoiceYear)->where('month','like', $invoiceMonth)->first();
+
+            //TODO add invoice if not exist
+
+            $invoicesIds = explode(';',$taxSettlement->sales_invoice_ids);
+            array_push($invoicesIds, $id);
+            $invoicesIds = implode(';', $invoicesIds);
+
+            $taxSettlement->update([
+                'sales_invoice_ids' => $invoicesIds
+            ]);
+
             return null;
         }
         else return null;
