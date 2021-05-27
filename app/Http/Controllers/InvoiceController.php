@@ -258,7 +258,8 @@ class InvoiceController extends Controller{
 
         $invoiceDate = substr($request->input('issue_date'),0 ,-3);
 
-        $taxSettlement = $this->checkIfIsInTaxSettlement($invoiceDate);
+        $taxSettlement = $this->checkIfIsInTaxSettlement($invoiceDate,$id);
+//        dd($taxSettlement);
 
         if ($taxSettlement == true){
             $taxSettlementData = $this->getTaxSettlementId($invoiceDate);
@@ -292,29 +293,35 @@ class InvoiceController extends Controller{
 
     public function updateTaxSettlement($id, $invoiceDate){
         $oldDate = $this->getOldIssueDate($id);
+//        dd($oldDate, $invoiceDate);
+
         if($invoiceDate !== $oldDate){
             $taxSettlement = TaxSettlement::where('sales_invoice_ids','like', '%'.$id.'%')->first();
-            $invoicesIds = explode(';',$taxSettlement->sales_invoice_ids);
-            $invoicesIds = array_diff($invoicesIds, [$id]);
-            $invoicesIds = implode(';',$invoicesIds);
+            if($taxSettlement != null){
+                $invoicesIds = explode(';',$taxSettlement->sales_invoice_ids);
+                $invoicesIds = array_diff($invoicesIds, [$id]);
+                $invoicesIds = implode(';',$invoicesIds);
+                $taxSettlement->update([
+                    'sales_invoice_ids' => $invoicesIds
+                ]);
+            }
 
-            $taxSettlement->update([
-                'sales_invoice_ids' => $invoicesIds
-            ]);
+
 
             $invoiceYear = substr($invoiceDate, 0, -3);
             $invoiceMonth = substr($invoiceDate, 5);
             $taxSettlement = TaxSettlement::where('year','like', $invoiceYear)->where('month','like', $invoiceMonth)->first();
 
-            //TODO add invoice if not exist
+            //TODO add tax settlement if not exist
+            if($taxSettlement != null) {
+                $invoicesIds = explode(';', $taxSettlement->sales_invoice_ids);
+                array_push($invoicesIds, $id);
+                $invoicesIds = implode(';', $invoicesIds);
 
-            $invoicesIds = explode(';',$taxSettlement->sales_invoice_ids);
-            array_push($invoicesIds, $id);
-            $invoicesIds = implode(';', $invoicesIds);
-
-            $taxSettlement->update([
-                'sales_invoice_ids' => $invoicesIds
-            ]);
+                $taxSettlement->update([
+                    'sales_invoice_ids' => $invoicesIds
+                ]);
+            }
 
             return null;
         }
@@ -329,12 +336,16 @@ class InvoiceController extends Controller{
         return $oldIssueDate;
     }
 
-    public function checkIfIsInTaxSettlement($date): bool{
-        $user = Auth::user();
-        $taxSettlements = $user->taxSettlements;
-        $taxSettlementsDates = (new TaxSettlementController)->getTaxSettlementDates($taxSettlements);
+    public function checkIfIsInTaxSettlement($date, $id): bool{
+        $oldTaxSettlement = TaxSettlement::where('sales_invoice_ids','like', '%'.$id.'%')
+            ->where('user_id', '=', Auth::id())->first();
+        $month = substr($date,5,2);
+        $year = substr($date,0,-3);
 
-        if (in_array($date, $taxSettlementsDates)) return true;
+        $taxSettlement = TaxSettlement::where('year','like',$year)
+            ->where('month','like',$month)->first();
+
+        if (($oldTaxSettlement !=null) or ($taxSettlement != null)) return true;
         else return false;
     }
 
