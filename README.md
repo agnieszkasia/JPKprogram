@@ -23,8 +23,8 @@ To run this project:
 
 ## Application functionality
 * Login, registration users
-* Change user password
-* Reset user password via link send in email
+* Changing user password
+* Reseting user password via link send in email
 * Adding, viewing, editing, deleting sales invoices
 * Adding, viewing, editing, deleting purchase invoices
 * Filtering and sorting sales and purchase invoices
