@@ -41,6 +41,7 @@ class InvoiceController extends Controller{
     public function getCitiesNames($invoices): array{
         $i = 0;
         $cities = array();
+
         foreach ($invoices->get() as $invoice){
             $cities[$i] = $invoice->city;
             $i++;
@@ -78,6 +79,7 @@ class InvoiceController extends Controller{
     public function setStartAndEndDate($request): array{
         $startDate = null;
         $endDate = null;
+
         if ($request['start_date'] == null){
             $request['start_date'] = Auth::user()->invoices()->orderBy('issue_date')->first()->issue_date;
         } else $startDate = $request['start_date'];
@@ -364,7 +366,6 @@ class InvoiceController extends Controller{
 
         if ($taxSettlement == true){
             $this->updateTaxSettlement($id, null);
-
         }
 
         Invoice::find($id)->delete();
@@ -401,7 +402,6 @@ class InvoiceController extends Controller{
         $dompdf->loadHtml($html);
         $dompdf->render();
         $dompdf->stream((string)$invoice_name, ['Attachment' => true]);
-
 
     }
 }

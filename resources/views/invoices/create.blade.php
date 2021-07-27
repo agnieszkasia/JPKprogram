@@ -140,7 +140,7 @@
                     <table class="table table-borderless table-responsive">
                         <thead>
                         <tr>
-                            <th class="col-1 h5">Nazwa produktu/usługi</th>
+                            <th class="col-7 h5">Nazwa produktu/usługi</th>
                             <th class="col-md-2 h5">Ilość</th>
                             <th class="col-md-2 h5" >Cena jednostkowa</th>
                             <th><a href="javascript:void(0)" class="btn btn-success addRow">+</a> </th>
