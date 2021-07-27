@@ -23,8 +23,8 @@ To run this project:
 
 ## Application functionality
 * Login, registration users
-* Change user password
-* Reset user password via link send in email
+* Changing user password
+* Reseting user password via link send in email
 * Adding, viewing, editing, deleting sales invoices
 * Adding, viewing, editing, deleting purchase invoices
 * Filtering and sorting sales and purchase invoices
@@ -33,3 +33,21 @@ To run this project:
 * Viewing, deleting monthly tax settlement
 * Sorting tax settlements
 * Genereting a monthly tax settlement as XML file
+
+![Welocme Pagw](./images/1.jpg)
+
+![ProfilePage](./images/5.jpg)
+
+![Add Invoice Pagw](./images/2.jpg)
+
+![Invoice Pagw](./images/4.jpg)
+
+![Invoices Pagw](./images/7.jpg)
+
+![Warning Invoices Pagw](./images/8.jpg)
+
+![Delete Invoice Pagw](./images/6.jpg)
+
+![Tax Settlement Pagw](./images/3.jpg)
+
+![Invoice PDF](./images/9.jpg)
